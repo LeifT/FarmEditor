@@ -47,7 +47,7 @@ namespace FarmEditor.ViewModel {
                 _save = (SaveGame)serializer.Deserialize(reader);
             }
 
-            Console.WriteLine(_save.CropsOfTheWeek.Length);
+            Console.WriteLine(_save.Locations.Length);
 
 
             Tiles = new ObservableCollection<Tile>();

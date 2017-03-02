@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
 
 namespace FarmEditor.StardewValley.GameLocations {
-    [XmlRoot("Farm")]
+    [XmlRoot(nameof(Farm))]
     public class Farm : GameLocation {
         //public List<LargeTerrainFeature> LargeTerrainFeatures { get; set; }
         //public List<Building> Buildings { get; set; }

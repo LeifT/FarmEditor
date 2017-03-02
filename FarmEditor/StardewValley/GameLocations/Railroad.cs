@@ -1,8 +1,6 @@
 ﻿using System.Xml.Serialization;
 
 namespace FarmEditor.StardewValley.GameLocations {
-    [XmlRoot(nameof(FarmHouse))]
-    public class FarmHouse : GameLocation
-    {
-    }
+    [XmlRoot(nameof(Railroad))]
+    public class Railroad : GameLocation {}
 }
