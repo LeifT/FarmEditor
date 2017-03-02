@@ -129,6 +129,18 @@
     <None Include="Maps\Farm.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Maps\Farm_Combat.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Maps\Farm_Fishing.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Maps\Farm_Foraging.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Maps\Farm_Mining.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -143,8 +155,8 @@
     <Folder Include="Design\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Maps\Spritesheets\paths.png" />
-    <Resource Include="Maps\Spritesheets\spring_outdoorsTileSheet.png" />
+    <Resource Include="Maps\paths.png" />
+    <Resource Include="Maps\spring_outdoorsTileSheet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

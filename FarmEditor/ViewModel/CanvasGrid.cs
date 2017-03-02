@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Drawing;
@@ -36,15 +37,12 @@ namespace FarmEditor.ViewModel {
 
         public CanvasGrid() {
             _tileImages = new Dictionary<int, BitmapImage>();
-
-            _map = new TmxMap("Maps\\Farm.tmx");
-
+            _map = new TmxMap("Maps\\Farm_Mining.tmx");
             LayerBack = new ObservableCollection<Tile>();
 
             _width = _map.Width;
             _height = _map.Height;
 
-            //var back = _map.Layers["Back"];
 
             GetSprites();
 
@@ -53,7 +51,7 @@ namespace FarmEditor.ViewModel {
             foreach (var mapLayer in _map.Layers) {
                 foreach (var tile in mapLayer.Tiles) {
 
-                    if (tile.Gid == 0 || tile.Gid == 16) {
+                    if (tile.Gid == 0) {
                         continue;
                     }
 
@@ -74,7 +72,6 @@ namespace FarmEditor.ViewModel {
 
         private void GetSprites() {
             foreach (var tileset in _map.Tilesets) {
-
                 var spriteSheet = ToBitmapImage(new Bitmap(tileset.Image.Source));
                 var xSprites = spriteSheet.PixelWidth / tileset.TileWidth;
                 var ySprites = spriteSheet.PixelHeight / tileset.TileHeight;
