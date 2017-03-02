@@ -106,7 +106,7 @@
     <Compile Include="StardewValley\GameLocations\Town.cs" />
     <Compile Include="StardewValley\GameLocations\WizardHouse.cs" />
     <Compile Include="StardewValley\GameLocations\Woods.cs" />
-    <Compile Include="StardewValley\GameObject.cs" />
+    <Compile Include="StardewValley\GameObjecta.cs" />
     <Compile Include="StardewValley\SaveGame.cs" />
     <Compile Include="StardewValley\TerrainFeature.cs" />
     <Compile Include="StardewValley\Vector2.cs" />

@@ -3,7 +3,7 @@
 namespace FarmEditor.StardewValley.GameLocations {
     public class GameLocationa {
         //public List<Character> Characters { get; set; }
-        //public List<GameObject> GameObjects;
+        //public List<GameObject> Items;
         //public List<TerrainFeature> TerrainFeatures;
         //public List<Debris> Debris;
         public string Name { get; set; }

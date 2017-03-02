@@ -47,8 +47,11 @@ namespace FarmEditor.ViewModel {
                 _save = (SaveGame)serializer.Deserialize(reader);
             }
 
-            Console.WriteLine(_save.Locations.Length);
-
+            foreach (var saveLocation in _save.Locations) {
+                foreach (var saveLocationItem in saveLocation.Items) {
+                    Console.WriteLine(saveLocationItem.Value.GameObject.Name);
+                }
+            }
 
             Tiles = new ObservableCollection<Tile>();
             _width = _map.Width;

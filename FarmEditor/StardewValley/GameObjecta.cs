@@ -1,6 +1,6 @@
 ﻿namespace FarmEditor.StardewValley
 {
-    public class GameObject {
+    public class GameObjecta {
         public int SpecialVariable { get; set; }
         public int Category { get; set; }
         public bool SpecialItem { get; set; }
