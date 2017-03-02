@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using FarmEditor.Model;
@@ -18,11 +16,11 @@ namespace FarmEditor.ViewModel {
     public class CanvasGrid : ViewModelBase {
         private int _height;
         private int _width;
-        private TmxMap map;
+        private readonly Dictionary<int, BitmapImage> _tileImages;
+        private readonly TmxMap _map;
 
         public ObservableCollection<Tile> LayerBack { get; set; }
-
-        public Dictionary<int, BitmapImage> TileImages;
+        
 
         public int Width {
             get { return _width; }
@@ -37,46 +35,45 @@ namespace FarmEditor.ViewModel {
         }
 
         public CanvasGrid() {
-            TileImages = new Dictionary<int, BitmapImage>();
+            _tileImages = new Dictionary<int, BitmapImage>();
 
-            map = new TmxMap("Maps\\Farm.tmx");
+            _map = new TmxMap("Maps\\Farm.tmx");
 
             LayerBack = new ObservableCollection<Tile>();
 
-            _width = map.Width;
-            _height = map.Height;
+            _width = _map.Width;
+            _height = _map.Height;
 
-            var back = map.Layers["Back"];
-            var paths = map.Layers["Paths"];
+            //var back = _map.Layers["Back"];
 
             GetSprites();
 
-            foreach (var tile in back.Tiles) {
+            var zIndex = 0;
 
-                if (tile.Gid == 0 || tile.Gid == 16) {
-                    continue;
+            foreach (var mapLayer in _map.Layers) {
+                foreach (var tile in mapLayer.Tiles) {
+
+                    if (tile.Gid == 0 || tile.Gid == 16) {
+                        continue;
+                    }
+
+                    var a = new Tile();
+                    a.Height = 16;
+                    a.Width = 16;
+                    a.X = tile.X * 16;
+                    a.Y = tile.Y * 16;
+                    a.Z = zIndex;
+
+                    a.Image = _tileImages[tile.Gid];
+                    LayerBack.Add(a);
                 }
 
-                var a = new Tile();
-                a.Height = 16;
-                a.Width = 16;
-                a.X = tile.X*16;
-                a.Y = tile.Y*16;
-
-
-                a.Image = TileImages[tile.Gid];
-                LayerBack.Add(a);
+                zIndex++;
             }
-
-            
         }
 
         private void GetSprites() {
-            foreach (var tileset in map.Tilesets) {
-                if (!File.Exists(tileset.Image.Source)) {
-                    Console.WriteLine("tileset not found");
-                    continue;
-                }
+            foreach (var tileset in _map.Tilesets) {
 
                 var spriteSheet = ToBitmapImage(new Bitmap(tileset.Image.Source));
                 var xSprites = spriteSheet.PixelWidth / tileset.TileWidth;
@@ -87,7 +84,7 @@ namespace FarmEditor.ViewModel {
                 for (var y = 0; y < ySprites; y++) {
                     for (var x = 0; x < xSprites; x++) {
                         var bitmapSource = new CroppedBitmap(spriteSheet, new Int32Rect(x * tileset.TileWidth, y * tileset.TileHeight, tileset.TileWidth, tileset.TileHeight)) as BitmapSource;
-                        TileImages.Add(tId++, BitmapSourceToImage(bitmapSource));
+                        _tileImages.Add(tId++, BitmapSourceToImage(bitmapSource));
                     }
                  }
             }
