@@ -81,6 +81,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\Tile.cs" />
+    <Compile Include="StardewValley\BoundingBox.cs" />
+    <Compile Include="StardewValley\Character.cs" />
+    <Compile Include="StardewValley\GameLocations\FarmHouse.cs" />
+    <Compile Include="StardewValley\GameLocations\Farm.cs" />
+    <Compile Include="StardewValley\GameLocations\GameLocationa.cs" />
+    <Compile Include="StardewValley\GameObject.cs" />
+    <Compile Include="StardewValley\SaveGame.cs" />
+    <Compile Include="StardewValley\TerrainFeature.cs" />
+    <Compile Include="StardewValley\Vector2.cs" />
+    <Compile Include="StardewValley\WaterColor.cs" />
     <Compile Include="ViewModel\CanvasGrid.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -125,8 +135,12 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Maps\Farm.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Maps\FarmCave.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Maps\Farm_Combat.tmx">
@@ -139,6 +153,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Maps\Farm_Mining.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Maps\Greenhouse.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -157,6 +174,12 @@
   <ItemGroup>
     <Resource Include="Maps\paths.png" />
     <Resource Include="Maps\spring_outdoorsTileSheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Maps\Mines\mine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Maps\townInterior.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
