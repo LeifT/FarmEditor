@@ -7,9 +7,8 @@ using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Xml.Serialization;
+using StardewValleySave;
 using FarmEditor.Model;
-using FarmEditor.StardewValley;
 using GalaSoft.MvvmLight;
 using TiledSharp;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
@@ -39,20 +38,13 @@ namespace FarmEditor.ViewModel {
 
         public CanvasGrid() {
             _tileImages = new Dictionary<int, BitmapImage>();
-            _map = new TmxMap("Maps\\Farm_Fishing.tmx");
+            _map = new TmxMap("Maps\\Farm.tmx");
 
-            using (TextReader reader = new StreamReader("Leif_147754338"))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(SaveGame));
-                _save = (SaveGame)serializer.Deserialize(reader);
-            }
+            _save = new SaveGame();
+            _save.Load("Leif_147754338");
 
-            foreach (var saveLocation in _save.Locations) {
-                foreach (var saveLocationItem in saveLocation.Items) {
-                    Console.WriteLine(saveLocationItem.Value.GameObject.Name);
-                }
-            }
-
+            Console.WriteLine(SaveGame.loaded.player.money);
+            
             Tiles = new ObservableCollection<Tile>();
             _width = _map.Width;
             _height = _map.Height;

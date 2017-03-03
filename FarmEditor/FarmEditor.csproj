@@ -9,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FarmEditor</RootNamespace>
     <AssemblyName>FarmEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -52,6 +53,10 @@
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -81,36 +86,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\Tile.cs" />
-    <Compile Include="StardewValley\BoundingBox.cs" />
-    <Compile Include="StardewValley\Character.cs" />
-    <Compile Include="StardewValley\GameLocations\AdventureGuild.cs" />
-    <Compile Include="StardewValley\GameLocations\BathHousePool.cs" />
-    <Compile Include="StardewValley\GameLocations\Beach.cs" />
-    <Compile Include="StardewValley\GameLocations\BusStop.cs" />
-    <Compile Include="StardewValley\GameLocations\Cellar.cs" />
-    <Compile Include="StardewValley\GameLocations\Club.cs" />
-    <Compile Include="StardewValley\GameLocations\CommunityCenter.cs" />
-    <Compile Include="StardewValley\GameLocations\Desert.cs" />
-    <Compile Include="StardewValley\GameLocations\FarmCave.cs" />
-    <Compile Include="StardewValley\GameLocations\FarmHouse.cs" />
-    <Compile Include="StardewValley\GameLocations\Farm.cs" />
-    <Compile Include="StardewValley\GameLocations\Forest.cs" />
-    <Compile Include="StardewValley\GameLocations\GameLocationa.cs" />
-    <Compile Include="StardewValley\GameLocations\JojaMart.cs" />
-    <Compile Include="StardewValley\GameLocations\LibraryMuseum.cs" />
-    <Compile Include="StardewValley\GameLocations\Mountain.cs" />
-    <Compile Include="StardewValley\GameLocations\Railroad.cs" />
-    <Compile Include="StardewValley\GameLocations\SeedShop.cs" />
-    <Compile Include="StardewValley\GameLocations\Sewer.cs" />
-    <Compile Include="StardewValley\GameLocations\Summit.cs" />
-    <Compile Include="StardewValley\GameLocations\Town.cs" />
-    <Compile Include="StardewValley\GameLocations\WizardHouse.cs" />
-    <Compile Include="StardewValley\GameLocations\Woods.cs" />
-    <Compile Include="StardewValley\GameObjecta.cs" />
-    <Compile Include="StardewValley\SaveGame.cs" />
-    <Compile Include="StardewValley\TerrainFeature.cs" />
-    <Compile Include="StardewValley\Vector2.cs" />
-    <Compile Include="StardewValley\WaterColor.cs" />
     <Compile Include="ViewModel\CanvasGrid.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -200,6 +175,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Maps\townInterior.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StardewValleySave\StardewValleySave.csproj">
+      <Project>{bd88ba77-e4f9-47ea-89f4-02696aa36378}</Project>
+      <Name>StardewValleySave</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
