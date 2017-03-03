@@ -58,31 +58,24 @@ namespace StardewValleySave {
         public int weatherForTomorrow;
         public int whichFarm;
 
-        static SaveGame()
-        {
+        static SaveGame() {
             serializer = new XmlSerializer(typeof(SaveGame), new Type[] { typeof(Tool), typeof(GameLocation), typeof(Crow), typeof(Duggy), typeof(Bug), typeof(BigSlime), typeof(Fireball), typeof(Ghost), typeof(Child), typeof(Pet), typeof(Dog), typeof(Cat), typeof(Horse), typeof(GreenSlime), typeof(LavaCrab), typeof(RockCrab), typeof(ShadowGuy), typeof(SkeletonMage), typeof(SquidKid), typeof(Grub), typeof(Fly), typeof(DustSpirit), typeof(Quest), typeof(MetalHead), typeof(ShadowGirl), typeof(Monster), typeof(TerrainFeature) });
             farmerSerializer = new XmlSerializer(typeof(Farmer), new Type[] { typeof(Tool) });
             locationSerializer = new XmlSerializer(typeof(GameLocation), new Type[] { typeof(Tool), typeof(Crow), typeof(Duggy), typeof(Fireball), typeof(Ghost), typeof(GreenSlime), typeof(LavaCrab), typeof(RockCrab), typeof(ShadowGuy), typeof(SkeletonWarrior), typeof(Child), typeof(Pet), typeof(Dog), typeof(Cat), typeof(Horse), typeof(SquidKid), typeof(Grub), typeof(Fly), typeof(DustSpirit), typeof(Bug), typeof(BigSlime), typeof(BreakableContainer), typeof(MetalHead), typeof(ShadowGirl), typeof(Monster), typeof(TerrainFeature) });
         }
 
-        public SaveGame() {
-        }
-
         public void Load(string file) {
-            SaveGame saveGame = new SaveGame();
-           
-            string[] folderPath = new string[] { Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StardewValley", "Saves", file, file };
-            string str = Path.Combine(folderPath);
-            if (!File.Exists(str)) {
-                str = string.Concat(str, ".xml");
-                if (!File.Exists(str)) {
-                    return;
-                }
+            string[] folderPath = { Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StardewValley", "Saves", file, file };
+            string filePath = Path.Combine(folderPath);
+            
+            if (!File.Exists(filePath)) {
+                return;
             }
           
             Stream stream = null;
+
             try {
-                stream = File.Open(str, FileMode.Open);
+                stream = File.Open(filePath, FileMode.Open);
                 
             } catch (IOException) {
                 stream?.Close();

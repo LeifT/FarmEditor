@@ -13,9 +13,5 @@
         public bool wasFed;
         public string sound;
         public string type;
-
-        public BarnDweller()
-        {
-        }
     }
 }

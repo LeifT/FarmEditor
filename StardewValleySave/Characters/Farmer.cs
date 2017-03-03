@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using StardewValleySave.Objects;
 using StardewValleySave.Quests;
 
-namespace StardewValleySave {
+namespace StardewValleySave.Characters {
     public class Farmer : Character {
         public List<Quest> questLog = new List<Quest>();
         public List<int> professions = new List<int>();

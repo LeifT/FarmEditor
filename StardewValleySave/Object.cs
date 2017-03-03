@@ -53,37 +53,31 @@ namespace StardewValleySave {
         public Object() {}
 
         [XmlIgnore]
-        public override int Stack
-        {
-            get
-            {
-                return Math.Max(0, this.stack);
+        public override int Stack {
+            get {
+                return Math.Max(0, stack);
             }
-            set
-            {
-                this.stack = Math.Min(Math.Max(0, value), this.maximumStackSize());
+            set {
+                stack = Math.Min(Math.Max(0, value), maximumStackSize());
             }
         }
 
         [XmlIgnore]
-        public override string Name
-        {
-            get
-            {
-                return string.Concat(this.name, (this.isRecipe ? " Recipe" : ""));
+        public override string Name {
+            get {
+                return string.Concat(name, isRecipe ? " Recipe" : "");
             }
-            set
-            {
-                this.name = value;
+            set {
+                name = value;
             }
         }
 
         public override int maximumStackSize() {
-            if (this.category == -22) {
+            if (category == -22) {
                 return 1;
             }
 
-            if (this.bigCraftable) {
+            if (bigCraftable) {
                 return -1;
             }
 

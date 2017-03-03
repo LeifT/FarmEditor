@@ -44,6 +44,12 @@ namespace FarmEditor.ViewModel {
             _save.Load("Leif_147754338");
 
             Console.WriteLine(SaveGame.loaded.player.money);
+
+            foreach (var loadedLocation in SaveGame.loaded.locations) {
+                foreach (var locaiton in loadedLocation.objects) {
+                    Console.WriteLine($"Vector2({locaiton.Key.X},{locaiton.Key.Y}) : {locaiton.Value.Name}");
+                }
+            }
             
             Tiles = new ObservableCollection<Tile>();
             _width = _map.Width;

@@ -1,4 +1,3 @@
 ﻿namespace StardewValleySave.Buildings {
-    public class Coop : Building {
-    }
+    public class Coop : Building { }
 }

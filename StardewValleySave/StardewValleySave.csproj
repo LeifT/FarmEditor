@@ -108,7 +108,7 @@
     <Compile Include="BuildingUpgrade.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="CoopDweller.cs" />
-    <Compile Include="Farmer.cs" />
+    <Compile Include="Characters\Farmer.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Locations\AdventureGuild.cs" />
     <Compile Include="Locations\BathHousePool.cs" />
