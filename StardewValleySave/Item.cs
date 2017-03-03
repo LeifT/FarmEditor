@@ -1,4 +1,6 @@
 ﻿using System.Xml.Serialization;
+using StardewValleySave.Objects;
+using StardewValleySave.Tools;
 
 namespace StardewValleySave {
     [XmlInclude(typeof(Object))]
@@ -9,30 +11,7 @@ namespace StardewValleySave {
         public bool specialItem;
         public bool hasBeenInInventory;
 
-        public abstract string Name
-        {
-            get;
-            set;
-        }
-
-        public virtual int parentSheetIndex
-        {
-            get
-            {
-                if (!(this is Object))
-                {
-                    return -1;
-                }
-                return (this as Object).parentSheetIndex;
-            }
-        }
-
-        public abstract int Stack
-        {
-            get;
-            set;
-        }
-
-        public abstract int maximumStackSize();
+        public string Name { get; set; }
+        public int Stack { get; set; }
     }
 }

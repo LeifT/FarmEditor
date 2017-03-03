@@ -1,4 +1,4 @@
-﻿namespace StardewValleySave {
+﻿namespace StardewValleySave.Objects {
     public class Fence : Object {
         public float health;
         public float maxHealth;

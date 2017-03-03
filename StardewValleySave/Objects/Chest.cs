@@ -6,11 +6,11 @@ using StardewValleySave.Tools;
 namespace StardewValleySave.Objects {
     [XmlInclude(typeof(MeleeWeapon))]
     public class Chest : Object {
-        public int currentLidFrame = 501;
-        public int frameCounter = -1;
+        public int currentLidFrame;
+        public int frameCounter;
         public int coins;
         public List<Item> items = new List<Item>();
-        public string chestType = "";
+        public string chestType;
         public Color tint = Color.White;
         public Color playerChoiceColor = Color.Black;
         public bool playerChest;

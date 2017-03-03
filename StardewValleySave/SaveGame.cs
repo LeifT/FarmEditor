@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using StardewValleySave.Characters;
 using StardewValleySave.Locations;
 using StardewValleySave.Monsters;
-using StardewValleySave.Objects;
 using StardewValleySave.Quests;
 using StardewValleySave.TerrainFeatures;
+using StardewValleySave.Tools;
+using Object = StardewValleySave.Objects.Object;
 
 namespace StardewValleySave {
     public class SaveGame {
         public static XmlSerializer serializer;
         public static XmlSerializer farmerSerializer;
-        public static XmlSerializer locationSerializer;
         public Farmer player;
         public List<GameLocation> locations;
         public string currentSeason;
@@ -42,7 +43,6 @@ namespace StardewValleySave {
         public bool isSnowing;
         public bool shouldSpawnMonsters;
         public Stats stats;
-        public static SaveGame loaded;
         public float musicVolume;
         public float soundVolume;
         public int[] cropsOfTheWeek;
@@ -58,10 +58,39 @@ namespace StardewValleySave {
         public int weatherForTomorrow;
         public int whichFarm;
 
+        public static SaveGame loaded;
+
         static SaveGame() {
             serializer = new XmlSerializer(typeof(SaveGame), new Type[] { typeof(Tool), typeof(GameLocation), typeof(Crow), typeof(Duggy), typeof(Bug), typeof(BigSlime), typeof(Fireball), typeof(Ghost), typeof(Child), typeof(Pet), typeof(Dog), typeof(Cat), typeof(Horse), typeof(GreenSlime), typeof(LavaCrab), typeof(RockCrab), typeof(ShadowGuy), typeof(SkeletonMage), typeof(SquidKid), typeof(Grub), typeof(Fly), typeof(DustSpirit), typeof(Quest), typeof(MetalHead), typeof(ShadowGirl), typeof(Monster), typeof(TerrainFeature) });
             farmerSerializer = new XmlSerializer(typeof(Farmer), new Type[] { typeof(Tool) });
-            locationSerializer = new XmlSerializer(typeof(GameLocation), new Type[] { typeof(Tool), typeof(Crow), typeof(Duggy), typeof(Fireball), typeof(Ghost), typeof(GreenSlime), typeof(LavaCrab), typeof(RockCrab), typeof(ShadowGuy), typeof(SkeletonWarrior), typeof(Child), typeof(Pet), typeof(Dog), typeof(Cat), typeof(Horse), typeof(SquidKid), typeof(Grub), typeof(Fly), typeof(DustSpirit), typeof(Bug), typeof(BigSlime), typeof(BreakableContainer), typeof(MetalHead), typeof(ShadowGirl), typeof(Monster), typeof(TerrainFeature) });
+        }
+
+        public void Save() {
+            Stream stream = null;
+
+            try {
+                stream = File.Create(loaded.player.name);
+            }
+            catch (IOException) {
+                if (stream != null) {
+                    stream.Close();
+                    stream.Dispose();
+                }
+            }
+
+            XmlWriterSettings xmlWriterSetting = new XmlWriterSettings() {
+                CloseOutput = true
+            };
+
+            using (XmlWriter xmlWriter = XmlWriter.Create(stream, xmlWriterSetting)) {
+                xmlWriter.WriteStartDocument();
+                serializer.Serialize(xmlWriter, loaded);
+                xmlWriter.WriteEndDocument();
+                xmlWriter.Flush();
+            }
+
+            stream.Close();
+            stream.Dispose();
         }
 
         public void Load(string file) {

@@ -5,7 +5,7 @@ namespace StardewValleySave {
     public class Crop {
         public List<int> phaseDays = new List<int>();
         public int rowInSpriteSheet;
-        public int phaseToShow = -1;
+        public int phaseToShow;
         public int currentPhase;
         public int harvestMethod;
         public int indexOfHarvest;

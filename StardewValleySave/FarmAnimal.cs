@@ -35,7 +35,7 @@ namespace StardewValleySave {
         public Rectangle sidewaysSourceRect;
         public long myID;
         public long ownerID;
-        public long parentId = (long)-1;
+        public long parentId = -1;
         public Vector2 homeLocation;
         public short moodMessage;
     }

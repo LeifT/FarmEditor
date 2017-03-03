@@ -1,9 +1,7 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
-using StardewValleySave.Objects;
 
-namespace StardewValleySave {
+namespace StardewValleySave.Objects {
     [XmlInclude(typeof(Fence))]
     [XmlInclude(typeof(Boots))]
     [XmlInclude(typeof(Cask))]
@@ -26,15 +24,15 @@ namespace StardewValleySave {
         public string name;
         public string type;
         public bool canBeSetDown;
-        public bool canBeGrabbed = true;
+        public bool canBeGrabbed;
         public bool isHoedirt;
         public bool isSpawnedObject;
         public bool questItem;
-        public bool isOn = true;
+        public bool isOn;
         public int fragility;
         public int price;
-        public int edibility = -300;
-        public int stack = 1;
+        public int edibility;
+        public int stack;
         public int quality;
         public bool bigCraftable;
         public bool setOutdoors;
@@ -49,39 +47,5 @@ namespace StardewValleySave {
         public int minutesUntilReady;
         public Rectangle boundingBox;
         public Vector2 scale;
-
-        public Object() {}
-
-        [XmlIgnore]
-        public override int Stack {
-            get {
-                return Math.Max(0, stack);
-            }
-            set {
-                stack = Math.Min(Math.Max(0, value), maximumStackSize());
-            }
-        }
-
-        [XmlIgnore]
-        public override string Name {
-            get {
-                return string.Concat(name, isRecipe ? " Recipe" : "");
-            }
-            set {
-                name = value;
-            }
-        }
-
-        public override int maximumStackSize() {
-            if (category == -22) {
-                return 1;
-            }
-
-            if (bigCraftable) {
-                return -1;
-            }
-
-            return 999;
-        }
     }
 }

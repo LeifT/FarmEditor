@@ -12,5 +12,5 @@ namespace StardewValleySave.TerrainFeatures {
     [XmlInclude(typeof(ResourceClump))]
     [XmlInclude(typeof(Stalagmite))]
     [XmlInclude(typeof(Tree))]
-    public abstract class TerrainFeature {}
+    public abstract class TerrainFeature { }
 }

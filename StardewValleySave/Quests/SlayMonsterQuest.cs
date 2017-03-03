@@ -6,7 +6,5 @@
         public int numberToKill;
         public int reward;
         public int numberKilled;
-
-        public SlayMonsterQuest() {}
     }
 }

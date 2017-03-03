@@ -1,18 +1,7 @@
-﻿using System.Xml.Serialization;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
-namespace StardewValleySave
-{
+namespace StardewValleySave {
     public class Character {
-        [XmlIgnore]
-        public Vector2 position;
-
-        [XmlIgnore] 
-        public int speed;
-
-        [XmlIgnore]
-        public int facingDirection = 2;
-
         public string name;
         public bool isEmoting;
         public bool isCharging;
@@ -24,30 +13,14 @@ namespace StardewValleySave
         public bool faceTowardFarmer;
         public bool faceAwayFromFarmer;
         public bool ignoreMovementAnimation;
-        public float scale = 1f;
+        public float scale;
         public float timeBeforeAIMovementAgain;
         public float glowingTransparency;
         public float glowRate;
 
-        protected int currentEmote;
+        public Vector2 Position { get; set; }
 
-        public Vector2 Position {
-            get {
-                return position;
-            }
-            set {
-                position = value;
-            }
-        }
-
-        public int Speed {
-            get {
-                return speed;
-            }
-            set {
-                speed = value;
-            }
-        }
+        public int Speed { get; set; }
 
         public bool IsEmoting {
             get {
@@ -58,15 +31,6 @@ namespace StardewValleySave
             }
         }
 
-        public int CurrentEmote {
-            get {
-                return currentEmote;
-            }
-            set {
-                currentEmote = value;
-            }
-        }
-
-  
+        public int CurrentEmote { get; set; }
     }
 }

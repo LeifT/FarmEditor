@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using StardewValleySave.Objects;
 using StardewValleySave.Quests;
+using StardewValleySave.Tools;
 
 namespace StardewValleySave.Characters {
     public class Farmer : Character {
@@ -36,8 +37,8 @@ namespace StardewValleySave.Characters {
         public int shirt;
         public int hair;
         public int skin;
-        public int accessory = -1;
-        public int facialHair = -1;
+        public int accessory;
+        public int facialHair;
         public Color hairstyleColor;
         public Color pantsColor;
         public Color newEyeColor;
@@ -69,9 +70,9 @@ namespace StardewValleySave.Characters {
         public int addedForagingLevel;
         public int addedFishingLevel;
         public int addedLuckLevel;
-        public int maxStamina = 270;
-        public int maxItems = 12;
-        public float stamina = 270f;
+        public int maxStamina;
+        public int maxItems;
+        public float stamina;
         public int resilience;
         public int attack;
         public int immunity;
@@ -81,14 +82,14 @@ namespace StardewValleySave.Characters {
         public float critChanceModifier;
         public float critPowerModifier;
         public float weaponPrecisionModifier;
-        public int money = 500;
+        public int money;
         public int clubCoins;
         public uint totalMoneyEarned;
         public uint millisecondsPlayed;
         public Tool toolBeingUpgraded;
         public int daysLeftForToolUpgrade;
         public int houseUpgradeLevel;
-        public int daysUntilHouseUpgrade = -1;
+        public int daysUntilHouseUpgrade;
         public int coopUpgradeLevel;
         public int barnUpgradeLevel;
         public bool hasGreenhouse;
@@ -97,13 +98,13 @@ namespace StardewValleySave.Characters {
         public bool hasUnlockedSkullDoor;
         public bool hasDarkTalisman;
         public bool hasMagicInk;
-        public bool showChestColorPicker = true;
+        public bool showChestColorPicker;
         public int magneticRadius;
         public int temporaryInvincibilityTimer;
-        public int health = 100;
-        public int maxHealth = 100;
+        public int health;
+        public int maxHealth;
         public int timesReachedMineBottom;
-        public bool isMale = true;
+        public bool isMale;
         public bool hasBusTicket;
         public bool stardewHero;
         public bool hasClubCard;
@@ -123,5 +124,9 @@ namespace StardewValleySave.Characters {
         public int skinColor;
         public int hairColor;
         public int eyeColor;
+        public string bobber = "";
+        public int saveTime;
+        public int daysMarried;
+        public float movementMultiplier = 0.01f;
     }
 }

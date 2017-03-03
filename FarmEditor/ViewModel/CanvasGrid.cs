@@ -45,11 +45,16 @@ namespace FarmEditor.ViewModel {
 
             Console.WriteLine(SaveGame.loaded.player.money);
 
-            foreach (var loadedLocation in SaveGame.loaded.locations) {
-                foreach (var locaiton in loadedLocation.objects) {
-                    Console.WriteLine($"Vector2({locaiton.Key.X},{locaiton.Key.Y}) : {locaiton.Value.Name}");
+            foreach (var playerItem in SaveGame.loaded.player.items) {
+                if (playerItem == null) {
+                    continue;
                 }
+
+                Console.WriteLine(playerItem.Name);
             }
+
+            _save.Save();
+
             
             Tiles = new ObservableCollection<Tile>();
             _width = _map.Width;

@@ -59,7 +59,7 @@
             }
             set
             {
-                this.averageBedtime = (this.averageBedtime * (this.daysPlayed - 1) + value) / this.daysPlayed;
+                averageBedtime = (averageBedtime * (daysPlayed - 1) + value) / daysPlayed;
             }
         }
 
@@ -637,10 +637,6 @@
             {
                 this.weedsEliminated = value;
             }
-        }
-
-        public Stats()
-        {
         }
     }
 }

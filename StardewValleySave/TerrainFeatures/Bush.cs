@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-
-namespace StardewValleySave.TerrainFeatures
-{
+﻿namespace StardewValleySave.TerrainFeatures {
     public class Bush : LargeTerrainFeature {
         public int size;
         public int tileSheetOffset;

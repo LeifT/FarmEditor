@@ -1,4 +1,3 @@
 ﻿namespace StardewValleySave.Buildings {
-    public class Stable : Building {
-    }
+    public class Stable : Building { }
 }

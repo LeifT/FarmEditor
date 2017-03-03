@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
-using StardewValleySave.Locations;
 using StardewValleySave.TerrainFeatures;
+using Object = StardewValleySave.Objects.Object;
 
-namespace StardewValleySave {
+namespace StardewValleySave.Locations {
     [XmlInclude(typeof(AnimalHouse))]
     [XmlInclude(typeof(Farm))]
     [XmlInclude(typeof(AdventureGuild))]
@@ -38,7 +38,7 @@ namespace StardewValleySave {
         public SerializableDictionary<Vector2, TerrainFeature> terrainFeatures = new SerializableDictionary<Vector2, TerrainFeature>();
         public List<Debris> debris = new List<Debris>();
         public string name;
-        public Color waterColor = Color.White * 0.33f;
+        public Color waterColor;
         public bool isFarm;
         public bool isOutdoors;
         public bool isStructure;
@@ -47,13 +47,5 @@ namespace StardewValleySave {
         public bool ignoreLights;
         public bool treatAsOutdoors;
         public int numberOfSpawnedObjectsOnMap;
-
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
     }
 }

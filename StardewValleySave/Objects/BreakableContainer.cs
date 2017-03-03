@@ -1,4 +1,3 @@
 ﻿namespace StardewValleySave.Objects {
-    public class BreakableContainer : Object {
-    }
+    public class BreakableContainer : Object { }
 }

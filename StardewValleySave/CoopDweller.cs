@@ -6,7 +6,7 @@
         public int friendshipTowardFarmer;
         public int daysSinceLastFed;
         public int pushAccumulator;
-        public int uniqueFrameAccumulator = -1;
+        public int uniqueFrameAccumulator;
         public int age;
         public int ageWhenMature;
         public bool wasFed;

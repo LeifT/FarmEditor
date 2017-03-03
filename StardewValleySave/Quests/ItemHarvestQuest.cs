@@ -2,7 +2,5 @@
     public class ItemHarvestQuest : Quest {
         public int itemIndex;
         public int number;
-
-        public ItemHarvestQuest() {}
     }
 }

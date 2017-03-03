@@ -6,7 +6,5 @@
         public int number;
         public int reward;
         public int resource;
-
-        public ResourceCollectionQuest() { }
     }
 }

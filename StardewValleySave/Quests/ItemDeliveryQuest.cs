@@ -3,8 +3,6 @@
         public string targetMessage;
         public string target;
         public int item;
-        public int number = 1;
-
-        public ItemDeliveryQuest() {}
+        public int number;
     }
 }

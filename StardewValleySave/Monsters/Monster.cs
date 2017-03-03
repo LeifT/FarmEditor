@@ -8,7 +8,7 @@ namespace StardewValleySave.Monsters {
         public int coinsToDrop;
         public int durationOfRandomMovements;
         public int resilience;
-        public int slipperiness = 2;
+        public int slipperiness;
         public int experienceGained;
         public double jitteriness;
         public double missChance;

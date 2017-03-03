@@ -1,3 +1,3 @@
 ﻿namespace StardewValleySave.Locations {
-    public class BathHousePool : GameLocation {}
+    public class BathHousePool : GameLocation { }
 }

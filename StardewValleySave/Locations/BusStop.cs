@@ -1,5 +1,3 @@
 ﻿namespace StardewValleySave.Locations {
-    public class BusStop : GameLocation {
-        
-    }
+    public class BusStop : GameLocation { }
 }

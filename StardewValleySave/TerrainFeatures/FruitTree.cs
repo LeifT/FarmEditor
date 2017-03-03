@@ -1,7 +1,7 @@
 ﻿namespace StardewValleySave.TerrainFeatures {
     public class FruitTree : TerrainFeature {
         public int growthStage;
-        public int treeType = -1;
+        public int treeType;
         public int indexOfFruit;
         public int daysUntilMature;
         public int fruitsOnTree;

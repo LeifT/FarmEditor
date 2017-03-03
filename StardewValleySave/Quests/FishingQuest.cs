@@ -7,7 +7,5 @@
         public int reward;
         public int numberFished;
         public int whichFish;
-
-        public FishingQuest() {}
     }
 }

@@ -4,7 +4,7 @@ namespace StardewValleySave.Monsters {
     public class GreenSlime : Monster {
         public bool leftDrift;
         public bool cute = true;
-        public int readyToMate = 120000;
+        public int readyToMate;
         public int ageUntilFullGrown;
         public int animateTimer;
         public int timeSinceLastJump;

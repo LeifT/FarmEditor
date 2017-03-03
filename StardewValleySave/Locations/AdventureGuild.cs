@@ -1,5 +1,3 @@
 ﻿namespace StardewValleySave.Locations {
-    public class AdventureGuild : GameLocation {
-
-    }
+    public class AdventureGuild : GameLocation { }
 }

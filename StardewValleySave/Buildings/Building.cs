@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using StardewValleySave.Locations;
 
 namespace StardewValleySave.Buildings {
     [XmlInclude(typeof(Barn))]
@@ -23,7 +24,7 @@ namespace StardewValleySave.Buildings {
         public string nameOfIndoorsWithoutUnique;
         public Point humanDoor;
         public Point animalDoor;
-        public Color color = Color.White;
+        public Color color;
         public bool animalDoorOpen;
         public bool magical;
         public long owner;

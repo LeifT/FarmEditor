@@ -28,7 +28,5 @@ namespace StardewValleySave.Quests {
         public int questType;
         public int daysLeft;
         public List<int> nextQuests = new List<int>();
-
-        public Quest() {}
     }
 }

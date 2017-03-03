@@ -10,10 +10,10 @@ namespace StardewValleySave {
         public int socialAnxiety;
         public int optimism;
         public int gender;
-        public int id = -1;
+        public int id;
         public int homeRegion;
-        public int daysUntilBirthing = -1;
-        public int daysAfterLastBirth = -1;
+        public int daysUntilBirthing;
+        public int daysAfterLastBirth;
         public int birthday_Day;
         public int moveTowardPlayerThreshold;
         public bool isInvisible;
@@ -22,20 +22,8 @@ namespace StardewValleySave {
         public bool datingFarmer;
         public bool divorcedFromFarmer;
         public int daysMarried;
-
-        protected int defaultFacingDirection;
-        private Vector2 defaultPosition;
-        private bool isWalkingInSquare;
-        private bool isWalkingTowardPlayer;
-
-        public int DefaultFacingDirection {
-            get {
-                return defaultFacingDirection;
-            }
-            set {
-                defaultFacingDirection = value;
-            }
-        }
+        
+        public int DefaultFacingDirection { get; set; }
 
         public string DefaultMap {
             get {
@@ -46,40 +34,14 @@ namespace StardewValleySave {
             } 
         }
 
-        public Vector2 DefaultPosition {
-            get {
-                return defaultPosition;
-            }
-            set {
-                defaultPosition = value;
-            }
-        }
+        public Vector2 DefaultPosition { get; set; }
+        public bool IsWalkingInSquare { get; set; }
+        public bool IsWalkingTowardPlayer { get; set; }
 
-        public bool IsWalkingInSquare {
+        public virtual bool IsMonster {
             get {
-                return isWalkingInSquare;
-            }
-            set {
-                isWalkingInSquare = value;
-            }
-        }
-
-        public bool IsWalkingTowardPlayer {
-            get {
-                return isWalkingTowardPlayer;
-            }
-            set {
-                isWalkingTowardPlayer = value;
-            }
-        }
-
-        public virtual bool IsMonster
-        {
-            get
-            {
                 return false;
             }
         }
-
     }
 }

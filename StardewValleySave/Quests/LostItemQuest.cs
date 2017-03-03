@@ -6,7 +6,5 @@
         public int tileX;
         public int tileY;
         public bool itemFound;
-
-        public LostItemQuest() {}
     }
 }
