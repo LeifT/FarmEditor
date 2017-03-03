@@ -51,592 +51,445 @@
         public uint geodesCracked;
         public SerializableDictionary<string, int> specificMonstersKilled = new SerializableDictionary<string, int>();
 
-        public uint AverageBedtime
-        {
-            get
-            {
-                return this.averageBedtime;
+        public uint CropsShipped {
+            get {
+                return cropsShipped;
             }
-            set
-            {
+            set {
+                cropsShipped = value;
+            }
+        }
+
+        public uint GeodesCracked {
+            get {
+                return geodesCracked;
+            }
+            set {
+                geodesCracked = value;
+            }
+        }
+
+        public uint SlimesKilled {
+            get {
+                return slimesKilled;
+            }
+            set {
+                slimesKilled = value;
+            }
+        }
+
+        public uint StarLevelCropsShipped {
+            get {
+                return starLevelCropsShipped;
+            }
+            set {
+                starLevelCropsShipped = value;
+            }
+        }
+        
+        public uint StoneGathered {
+            get {
+                return stoneGathered;
+            }
+            set {
+                stoneGathered = value;
+            }
+        }
+        
+        public uint QuestsCompleted {
+            get {
+                return questsCompleted;
+            }
+            set {
+                questsCompleted = value;
+            }
+        }
+        
+        public uint FishCaught {
+            get {
+                return fishCaught;
+            }
+            set {
+                fishCaught = value;
+            }
+        }
+        
+        public uint NotesFound {
+            get {
+                return notesFound;
+            }
+            set {
+                notesFound = value;
+            }
+        }
+        
+        public uint SticksChopped {
+            get {
+                return sticksChopped;
+            }
+            set {
+                sticksChopped = value;
+            }
+        }
+
+        public uint WeedsEliminated {
+            get {
+                return weedsEliminated;
+            }
+            set {
+                weedsEliminated = value;
+            }
+        }
+
+        public uint DaysPlayed {
+            get {
+                return daysPlayed;
+            }
+            set {
+                daysPlayed = value;
+            }
+        }
+
+        public uint BouldersCracked {
+            get {
+                return bouldersCracked;
+            }
+            set {
+                bouldersCracked = value;
+            }
+        }
+
+        public uint MysticStonesCrushed {
+            get {
+                return mysticStonesCrushed;
+            }
+            set {
+                mysticStonesCrushed = value;
+            }
+        }
+
+        public uint GoatCheeseMade {
+            get {
+                return goatCheeseMade;
+            }
+            set {
+                goatCheeseMade = value;
+            }
+        }
+
+        public uint CheeseMade {
+            get {
+                return cheeseMade;
+            }
+            set {
+                cheeseMade = value;
+            }
+        }
+
+        public uint PiecesOfTrashRecycled {
+            get {
+                return piecesOfTrashRecycled;
+            }
+            set {
+                piecesOfTrashRecycled = value;
+            }
+        }
+
+        public uint PreservesMade {
+            get {
+                return preservesMade;
+            }
+            set {
+                preservesMade = value;
+            }
+        }
+
+        public uint BeveragesMade {
+            get {
+                return beveragesMade;
+            }
+            set {
+                beveragesMade = value;
+            }
+        }
+
+        public uint BarsSmelted {
+            get {
+                return barsSmelted;
+            }
+            set {
+                barsSmelted = value;
+            }
+        }
+
+        public uint IridiumFound {
+            get {
+                return iridiumFound;
+            }
+            set {
+                iridiumFound = value;
+            }
+        }
+
+        public uint GoldFound {
+            get {
+                return goldFound;
+            }
+            set {
+                goldFound = value;
+            }
+        }
+
+        public uint CoinsFound {
+            get {
+                return coinsFound;
+            }
+            set {
+                coinsFound = value;
+            }
+        }
+        
+        public uint CoalFound {
+            get {
+                return coalFound;
+            }
+            set {
+                coalFound = value;
+            }
+        }
+
+        public uint IronFound {
+            get {
+                return ironFound;
+            }
+            set {
+                ironFound = value;
+            }
+        }
+
+        public uint CopperFound {
+            get {
+                return copperFound;
+            }
+            set {
+                copperFound = value;
+            }
+        }
+
+        public uint CaveCarrotsFound {
+            get {
+                return caveCarrotsFound;
+            }
+            set {
+                caveCarrotsFound = value;
+            }
+        }
+
+        public uint OtherPreciousGemsFound {
+            get {
+                return otherPreciousGemsFound;
+            }
+            set {
+                otherPreciousGemsFound = value;
+            }
+        }
+
+        public uint PrismaticShardsFound {
+            get {
+                return prismaticShardsFound;
+            }
+            set {
+                prismaticShardsFound = value;
+            }
+        }
+
+        public uint DiamondsFound {
+            get {
+                return diamondsFound;
+            }
+            set {
+                diamondsFound = value;
+            }
+        }
+
+        public uint MonstersKilled {
+            get {
+                return monstersKilled;
+            }
+            set {
+                monstersKilled = value;
+            }
+        }
+
+        public uint StepsTaken {
+            get {
+                return stepsTaken;
+            }
+            set {
+                stepsTaken = value;
+            }
+        }
+
+        public uint StumpsChopped {
+            get {
+                return stumpsChopped;
+            }
+            set {
+                stumpsChopped = value;
+            }
+        }
+
+        public uint TimesFished {
+            get {
+                return timesFished;
+            }
+            set {
+                timesFished = value;
+            }
+        }
+        
+        public uint AverageBedtime {
+            get {
+                return averageBedtime;
+            }
+            set {
                 averageBedtime = (averageBedtime * (daysPlayed - 1) + value) / daysPlayed;
             }
         }
 
-        public uint BarsSmelted
-        {
-            get
-            {
-                return this.barsSmelted;
+        public uint TimesUnconscious {
+            get {
+                return timesUnconscious;
             }
-            set
-            {
-                this.barsSmelted = value;
+            set {
+                timesUnconscious = value;
             }
         }
 
-        public uint BeveragesMade
-        {
-            get
-            {
-                return this.beveragesMade;
+        public uint GiftsGiven {
+            get {
+                return giftsGiven;
             }
-            set
-            {
-                this.beveragesMade = value;
+            set {
+                giftsGiven = value;
             }
         }
 
-        public uint BouldersCracked
-        {
-            get
-            {
-                return this.bouldersCracked;
+        public uint DirtHoed {
+            get {
+                return dirtHoed;
             }
-            set
-            {
-                this.bouldersCracked = value;
+            set {
+                dirtHoed = value;
             }
         }
 
-        public uint CaveCarrotsFound
-        {
-            get
-            {
-                return this.caveCarrotsFound;
+        public uint RocksCrushed {
+            get {
+                return rocksCrushed;
             }
-            set
-            {
-                this.caveCarrotsFound = value;
+            set {
+                rocksCrushed = value;
+            }
+        }
+        
+        public uint TrufflesFound {
+            get {
+                return trufflesFound;
+            }
+            set {
+                trufflesFound = value;
             }
         }
 
-        public uint CheeseMade
-        {
-            get
-            {
-                return this.cheeseMade;
+        public uint SheepWoolProduced {
+            get {
+                return sheepWoolProduced;
             }
-            set
-            {
-                this.cheeseMade = value;
+            set {
+                sheepWoolProduced = value;
             }
         }
 
-        public uint ChickenEggsLayed
-        {
-            get
-            {
-                return this.chickenEggsLayed;
+        public uint RabbitWoolProduced {
+            get {
+                return rabbitWoolProduced;
             }
-            set
-            {
-                this.chickenEggsLayed = value;
+            set {
+                rabbitWoolProduced = value;
             }
         }
 
-        public uint CoalFound
-        {
-            get
-            {
-                return this.coalFound;
+        public uint GoatMilkProduced {
+            get {
+                return goatMilkProduced;
             }
-            set
-            {
-                this.coalFound = value;
+            set {
+                goatMilkProduced = value;
             }
         }
 
-        public uint CoinsFound
-        {
-            get
-            {
-                return this.coinsFound;
+        public uint CowMilkProduced {
+            get {
+                return cowMilkProduced;
             }
-            set
-            {
-                this.coinsFound = value;
+            set {
+                cowMilkProduced = value;
             }
         }
 
-        public uint CopperFound
-        {
-            get
-            {
-                return this.copperFound;
+        public uint DuckEggsLayed {
+            get {
+                return duckEggsLayed;
             }
-            set
-            {
-                this.copperFound = value;
+            set {
+                duckEggsLayed = value;
+            }
+        }
+        
+        public uint ItemsCrafted{
+            get{
+                return itemsCrafted;
+            }
+            set{
+                itemsCrafted = value;
+            }
+        }
+        
+        public uint ChickenEggsLayed {
+            get {
+                return chickenEggsLayed;
+            }
+            set {
+                chickenEggsLayed = value;
             }
         }
 
-        public uint CowMilkProduced
-        {
-            get
-            {
-                return this.cowMilkProduced;
+        public uint ItemsCooked {
+            get {
+                return itemsCooked;
             }
-            set
-            {
-                this.cowMilkProduced = value;
+            set {
+                itemsCooked = value;
             }
         }
 
-        public uint CropsShipped
-        {
-            get
-            {
-                return this.cropsShipped;
+        public uint ItemsShipped {
+            get {
+                return itemsShipped;
             }
-            set
-            {
-                this.cropsShipped = value;
+            set {
+                itemsShipped = value;
             }
         }
-
-        public uint DaysPlayed
-        {
-            get
-            {
-                return this.daysPlayed;
-            }
-            set
-            {
-                this.daysPlayed = value;
-            }
-        }
-
-        public uint DiamondsFound
-        {
-            get
-            {
-                return this.diamondsFound;
-            }
-            set
-            {
-                this.diamondsFound = value;
-            }
-        }
-
-        public uint DirtHoed
-        {
-            get
-            {
-                return this.dirtHoed;
-            }
-            set
-            {
-                this.dirtHoed = value;
-            }
-        }
-
-        public uint DuckEggsLayed
-        {
-            get
-            {
-                return this.duckEggsLayed;
-            }
-            set
-            {
-                this.duckEggsLayed = value;
-            }
-        }
-
-        public uint FishCaught
-        {
-            get
-            {
-                return this.fishCaught;
-            }
-            set
-            {
-                this.fishCaught = value;
-            }
-        }
-
-        public uint GeodesCracked
-        {
-            get
-            {
-                return this.geodesCracked;
-            }
-            set
-            {
-                this.geodesCracked = value;
-            }
-        }
-
-        public uint GiftsGiven
-        {
-            get
-            {
-                return this.giftsGiven;
-            }
-            set
-            {
-                this.giftsGiven = value;
-            }
-        }
-
-        public uint GoatCheeseMade
-        {
-            get
-            {
-                return this.goatCheeseMade;
-            }
-            set
-            {
-                this.goatCheeseMade = value;
-            }
-        }
-
-        public uint GoatMilkProduced
-        {
-            get
-            {
-                return this.goatMilkProduced;
-            }
-            set
-            {
-                this.goatMilkProduced = value;
-            }
-        }
-
-        public uint GoldFound
-        {
-            get
-            {
-                return this.goldFound;
-            }
-            set
-            {
-                this.goldFound = value;
-            }
-        }
-
-        public uint IridiumFound
-        {
-            get
-            {
-                return this.iridiumFound;
-            }
-            set
-            {
-                this.iridiumFound = value;
-            }
-        }
-
-        public uint IronFound
-        {
-            get
-            {
-                return this.ironFound;
-            }
-            set
-            {
-                this.ironFound = value;
-            }
-        }
-
-        public uint ItemsCooked
-        {
-            get
-            {
-                return this.itemsCooked;
-            }
-            set
-            {
-                this.itemsCooked = value;
-            }
-        }
-
-        public uint ItemsCrafted
-        {
-            get
-            {
-                return this.itemsCrafted;
-            }
-            set
-            {
-                this.itemsCrafted = value;
-            }
-        }
-
-        public uint ItemsShipped
-        {
-            get
-            {
-                return this.itemsShipped;
-            }
-            set
-            {
-                this.itemsShipped = value;
-            }
-        }
-
-        public uint MonstersKilled
-        {
-            get
-            {
-                return this.monstersKilled;
-            }
-            set
-            {
-                this.monstersKilled = value;
-            }
-        }
-
-        public uint MysticStonesCrushed
-        {
-            get
-            {
-                return this.mysticStonesCrushed;
-            }
-            set
-            {
-                this.mysticStonesCrushed = value;
-            }
-        }
-
-        public uint NotesFound
-        {
-            get
-            {
-                return this.notesFound;
-            }
-            set
-            {
-                this.notesFound = value;
-            }
-        }
-
-        public uint OtherPreciousGemsFound
-        {
-            get
-            {
-                return this.otherPreciousGemsFound;
-            }
-            set
-            {
-                this.otherPreciousGemsFound = value;
-            }
-        }
-
-        public uint PiecesOfTrashRecycled
-        {
-            get
-            {
-                return this.piecesOfTrashRecycled;
-            }
-            set
-            {
-                this.piecesOfTrashRecycled = value;
-            }
-        }
-
-        public uint PreservesMade
-        {
-            get
-            {
-                return this.preservesMade;
-            }
-            set
-            {
-                this.preservesMade = value;
-            }
-        }
-
-        public uint PrismaticShardsFound
-        {
-            get
-            {
-                return this.prismaticShardsFound;
-            }
-            set
-            {
-                this.prismaticShardsFound = value;
-            }
-        }
-
-        public uint QuestsCompleted
-        {
-            get
-            {
-                return this.questsCompleted;
-            }
-            set
-            {
-                this.questsCompleted = value;
-            }
-        }
-
-        public uint RabbitWoolProduced
-        {
-            get
-            {
-                return this.rabbitWoolProduced;
-            }
-            set
-            {
-                this.rabbitWoolProduced = value;
-            }
-        }
-
-        public uint RocksCrushed
-        {
-            get
-            {
-                return this.rocksCrushed;
-            }
-            set
-            {
-                this.rocksCrushed = value;
-            }
-        }
-
-        public uint SeedsSown
-        {
-            get
-            {
-                return this.seedsSown;
-            }
-            set
-            {
-                this.seedsSown = value;
-            }
-        }
-
-        public uint SheepWoolProduced
-        {
-            get
-            {
-                return this.sheepWoolProduced;
-            }
-            set
-            {
-                this.sheepWoolProduced = value;
-            }
-        }
-
-        public uint SlimesKilled
-        {
-            get
-            {
-                return this.slimesKilled;
-            }
-            set
-            {
-                this.slimesKilled = value;
-            }
-        }
-
-        public uint StarLevelCropsShipped
-        {
-            get
-            {
-                return this.starLevelCropsShipped;
-            }
-            set
-            {
-                this.starLevelCropsShipped = value;
-            }
-        }
-
-        public uint StepsTaken
-        {
-            get
-            {
-                return this.stepsTaken;
-            }
-            set
-            {
-                this.stepsTaken = value;
-            }
-        }
-
-        public uint SticksChopped
-        {
-            get
-            {
-                return this.sticksChopped;
-            }
-            set
-            {
-                this.sticksChopped = value;
-            }
-        }
-
-        public uint StoneGathered
-        {
-            get
-            {
-                return this.stoneGathered;
-            }
-            set
-            {
-                this.stoneGathered = value;
-            }
-        }
-
-        public uint StumpsChopped
-        {
-            get
-            {
-                return this.stumpsChopped;
-            }
-            set
-            {
-                this.stumpsChopped = value;
-            }
-        }
-
-        public uint TimesFished
-        {
-            get
-            {
-                return this.timesFished;
-            }
-            set
-            {
-                this.timesFished = value;
-            }
-        }
-
-        public uint TimesUnconscious
-        {
-            get
-            {
-                return this.timesUnconscious;
-            }
-            set
-            {
-                this.timesUnconscious = value;
-            }
-        }
-
-        public uint TrufflesFound
-        {
-            get
-            {
-                return this.trufflesFound;
-            }
-            set
-            {
-                this.trufflesFound = value;
-            }
-        }
-
-        public uint WeedsEliminated
-        {
-            get
-            {
-                return this.weedsEliminated;
-            }
-            set
-            {
-                this.weedsEliminated = value;
-            }
-        }
+        
+        public uint SeedsSown {
+            get {
+                return seedsSown;
+            }
+            set {
+                seedsSown = value;
+            }
+        }     
     }
 }

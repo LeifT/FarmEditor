@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?> 
 <SaveGame xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<player>
 		<name>Leif</name>
@@ -25956,7 +25956,7 @@
 						</Object>
 					</value>
 				</item>
-				<item>
+	 			<item>
 					<key>
 						<Vector2>
 							<X>35</X><Y>44</Y>
@@ -104778,7 +104778,7 @@
 		</GameLocation>
 		<GameLocation xsi:type="Desert">
 			<characters />
-			<objects>			
+			<objects>
 				<item>
 					<key>
 						<Vector2>
@@ -105439,7 +105439,7 @@
 					<IsWalkingTowardPlayer>false</IsWalkingTowardPlayer>
 				</NPC>
 			</characters>
-			<objects />			
+			<objects />
 			<terrainFeatures />
 			<debris />
 			<name>Club</name>
@@ -105557,7 +105557,7 @@
 					<IsWalkingTowardPlayer>false</IsWalkingTowardPlayer>
 				</NPC>
 			</characters>
-			<objects />			
+			<objects />
 			<terrainFeatures />
 			<debris />
 			<name>SandyHouse</name>
@@ -105625,7 +105625,7 @@
 					<IsWalkingTowardPlayer>false</IsWalkingTowardPlayer>
 				</NPC>
 			</characters>
-			<objects />			
+			<objects />
 			<terrainFeatures />
 			<debris />
 			<name>ArchaeologyHouse</name>
@@ -105645,7 +105645,7 @@
 		</GameLocation>
 		<GameLocation>
 			<characters />
-			<objects />			
+			<objects />
 			<terrainFeatures />
 			<debris />
 			<name>WizardHouseBasement</name>
@@ -105715,7 +105715,7 @@
 					<IsWalkingTowardPlayer>false</IsWalkingTowardPlayer>
 				</NPC>
 			</characters>
-			<objects />			
+			<objects />
 			<terrainFeatures />
 			<debris />
 			<name>AdventureGuild</name>
@@ -115538,55 +115538,55 @@
 		<slimesKilled>0</slimesKilled>
 		<geodesCracked>0</geodesCracked>
 		<specificMonstersKilled />
-		<AverageBedtime>600</AverageBedtime>
-		<BarsSmelted>0</BarsSmelted>
-		<BeveragesMade>0</BeveragesMade>
-		<BouldersCracked>0</BouldersCracked>
-		<CaveCarrotsFound>0</CaveCarrotsFound>
-		<CheeseMade>0</CheeseMade>
-		<ChickenEggsLayed>0</ChickenEggsLayed>
-		<CoalFound>0</CoalFound>
-		<CoinsFound>0</CoinsFound>
-		<CopperFound>0</CopperFound>
-		<CowMilkProduced>0</CowMilkProduced>
 		<CropsShipped>0</CropsShipped>
-		<DaysPlayed>1</DaysPlayed>
-		<DiamondsFound>0</DiamondsFound>
-		<DirtHoed>0</DirtHoed>
-		<DuckEggsLayed>0</DuckEggsLayed>
-		<FishCaught>0</FishCaught>
 		<GeodesCracked>0</GeodesCracked>
-		<GiftsGiven>0</GiftsGiven>
-		<GoatCheeseMade>0</GoatCheeseMade>
-		<GoatMilkProduced>0</GoatMilkProduced>
-		<GoldFound>0</GoldFound>
-		<IridiumFound>0</IridiumFound>
-		<IronFound>0</IronFound>
-		<ItemsCooked>0</ItemsCooked>
-		<ItemsCrafted>0</ItemsCrafted>
-		<ItemsShipped>0</ItemsShipped>
-		<MonstersKilled>0</MonstersKilled>
-		<MysticStonesCrushed>0</MysticStonesCrushed>
-		<NotesFound>0</NotesFound>
-		<OtherPreciousGemsFound>0</OtherPreciousGemsFound>
-		<PiecesOfTrashRecycled>0</PiecesOfTrashRecycled>
-		<PreservesMade>0</PreservesMade>
-		<PrismaticShardsFound>0</PrismaticShardsFound>
-		<QuestsCompleted>0</QuestsCompleted>
-		<RabbitWoolProduced>0</RabbitWoolProduced>
-		<RocksCrushed>0</RocksCrushed>
-		<SeedsSown>0</SeedsSown>
-		<SheepWoolProduced>0</SheepWoolProduced>
 		<SlimesKilled>0</SlimesKilled>
 		<StarLevelCropsShipped>0</StarLevelCropsShipped>
-		<StepsTaken>0</StepsTaken>
-		<SticksChopped>0</SticksChopped>
 		<StoneGathered>0</StoneGathered>
+		<QuestsCompleted>0</QuestsCompleted>
+		<FishCaught>0</FishCaught>
+		<NotesFound>0</NotesFound>
+		<SticksChopped>0</SticksChopped>
+		<WeedsEliminated>0</WeedsEliminated>
+		<DaysPlayed>1</DaysPlayed>
+		<BouldersCracked>0</BouldersCracked>
+		<MysticStonesCrushed>0</MysticStonesCrushed>
+		<GoatCheeseMade>0</GoatCheeseMade>
+		<CheeseMade>0</CheeseMade>
+		<PiecesOfTrashRecycled>0</PiecesOfTrashRecycled>
+		<PreservesMade>0</PreservesMade>
+		<BeveragesMade>0</BeveragesMade>
+		<BarsSmelted>0</BarsSmelted>
+		<IridiumFound>0</IridiumFound>
+		<GoldFound>0</GoldFound>
+		<CoinsFound>0</CoinsFound>
+		<CoalFound>0</CoalFound>
+		<IronFound>0</IronFound>
+		<CopperFound>0</CopperFound>
+		<CaveCarrotsFound>0</CaveCarrotsFound>
+		<OtherPreciousGemsFound>0</OtherPreciousGemsFound>
+		<PrismaticShardsFound>0</PrismaticShardsFound>
+		<DiamondsFound>0</DiamondsFound>
+		<MonstersKilled>0</MonstersKilled>
+		<StepsTaken>0</StepsTaken>
 		<StumpsChopped>0</StumpsChopped>
 		<TimesFished>0</TimesFished>
+		<AverageBedtime>600</AverageBedtime>
 		<TimesUnconscious>0</TimesUnconscious>
+		<GiftsGiven>0</GiftsGiven>
+		<DirtHoed>0</DirtHoed>
+		<RocksCrushed>0</RocksCrushed>
 		<TrufflesFound>0</TrufflesFound>
-		<WeedsEliminated>0</WeedsEliminated>
+		<SheepWoolProduced>0</SheepWoolProduced>
+		<RabbitWoolProduced>0</RabbitWoolProduced>
+		<GoatMilkProduced>0</GoatMilkProduced>
+		<CowMilkProduced>0</CowMilkProduced>
+		<DuckEggsLayed>0</DuckEggsLayed>
+		<ItemsCrafted>0</ItemsCrafted>
+		<ChickenEggsLayed>0</ChickenEggsLayed>
+		<ItemsCooked>0</ItemsCooked>
+		<ItemsShipped>0</ItemsShipped>
+		<SeedsSown>0</SeedsSown>
 	</stats>
 	<musicVolume>0.75</musicVolume>
 	<soundVolume>1</soundVolume>
