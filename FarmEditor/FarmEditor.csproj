@@ -176,12 +176,6 @@
   <ItemGroup>
     <Resource Include="Maps\townInterior.png" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StardewValleySave\StardewValleySave.csproj">
-      <Project>{bd88ba77-e4f9-47ea-89f4-02696aa36378}</Project>
-      <Name>StardewValleySave</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

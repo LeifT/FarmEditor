@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmEditor", "FarmEditor\FarmEditor.csproj", "{329B1BB1-A713-4E1E-96D7-5483A1F729BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StardewValleySave", "StardewValleySave\StardewValleySave.csproj", "{BD88BA77-E4F9-47EA-89F4-02696AA36378}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{329B1BB1-A713-4E1E-96D7-5483A1F729BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{329B1BB1-A713-4E1E-96D7-5483A1F729BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{329B1BB1-A713-4E1E-96D7-5483A1F729BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD88BA77-E4F9-47EA-89F4-02696AA36378}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD88BA77-E4F9-47EA-89F4-02696AA36378}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD88BA77-E4F9-47EA-89F4-02696AA36378}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD88BA77-E4F9-47EA-89F4-02696AA36378}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
