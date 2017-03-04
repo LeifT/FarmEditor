@@ -53,6 +53,7 @@
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553" />
     <Reference Include="StardewValleySave, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\StardewValleySave.dll</HintPath>
@@ -86,6 +87,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\Tile.cs" />
+    <Compile Include="Utils\BitmapConverter.cs" />
     <Compile Include="ViewModel\CanvasGrid.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -175,6 +177,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Maps\townInterior.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Maps\springobjects.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TileSheets\Craftables.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

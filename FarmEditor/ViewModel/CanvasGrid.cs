@@ -1,161 +1,131 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Drawing;
-using System.Drawing.Imaging;
+using System.Linq;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using StardewValleySave;
 using FarmEditor.Model;
+using FarmEditor.Utils;
 using GalaSoft.MvvmLight;
+using StardewValleySave;
+using StardewValleySave.Locations;
 using TiledSharp;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
-using Point = System.Drawing.Point;
 
 namespace FarmEditor.ViewModel {
     public class CanvasGrid : ViewModelBase {
-        private int _height;
-        private int _width;
-        private readonly Dictionary<int, BitmapImage> _tileImages;
         private readonly TmxMap _map;
-        private readonly SaveGame _save;
+        private int _canvasHeight;
+        private int _canvasWidth;
+        private Dictionary<int, BitmapImage> _tileImages;
+        private Dictionary<int, BitmapImage> _objectSpriteSheet;
+        private Dictionary<int, BitmapImage> _bigCraftablespritesheet;
+
+        public CanvasGrid() {
+            var saves = SaveGame.GetSaves();
+
+            var save = SaveGame.LoadSave(saves[1].Filename);
+            _map = new TmxMap(string.Concat("Maps\\", Enum.GetName(typeof(Farm.FarmType), save.whichFarm), ".tmx"));
+
+            _canvasWidth = _map.Width;
+            _canvasHeight = _map.Height;
+
+            PopulateMapSpriteDictionary();
+            AddTilesToCanvas();
+
+            _objectSpriteSheet = SpritesheetToDictionary("Maps\\springobjects.png", 16, 16);
+            _bigCraftablespritesheet = SpritesheetToDictionary("TileSheets\\Craftables.png", 16, 32);
+
+            var farm = save.locations.FirstOrDefault(location => location.name.Equals("Farm"));
+
+            // TODO: Load FarmHouse
+
+            // TODO: Load Geenhouse
+
+            // TODO: Load Dirt
+
+            // Load Objects
+            foreach (var farmObject in farm.objects) {
+                if (farmObject.Value.GetType().IsAssignableFrom(typeof(StardewValleySave.Objects.Object))) {
+                    if (farmObject.Value.bigCraftable) {
+                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16 - 16, 2, 16, 32, _bigCraftablespritesheet[farmObject.Value.parentSheetIndex]));
+                    } else {
+                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 2, 16, 16, _objectSpriteSheet[farmObject.Value.parentSheetIndex]));
+                    }
+
+                    
+                }
+
+            }
+        }
 
         public ObservableCollection<Tile> Tiles { get; set; }
 
-        public int Width {
-            get { return _width; }
+        public int CanvasWidth {
+            get { return _canvasWidth; }
             set {
-                if (_width == value) {
+                if (_canvasWidth == value) {
                     return;
                 }
 
-                _width = value;
+                _canvasWidth = value;
                 RaisePropertyChanged();
             }
         }
 
-        public CanvasGrid() {
-            _tileImages = new Dictionary<int, BitmapImage>();
-            _map = new TmxMap("Maps\\Farm.tmx");
-
-            _save = new SaveGame();
-            _save.Load("Leif_147754338");
-
-            Console.WriteLine(SaveGame.Loaded.player.money);
-
-            foreach (var playerItem in SaveGame.Loaded.player.items) {
-                if (playerItem == null) {
-                    continue;
+        public int CanvasHeight {
+            get { return _canvasHeight; }
+            set {
+                if (_canvasHeight == value) {
+                    return;
                 }
 
-                Console.WriteLine(playerItem.Name);
+                _canvasHeight = value;
+                RaisePropertyChanged();
             }
-
-            _save.Save();
-
-            
+        }
+        
+        private void AddTilesToCanvas() {
             Tiles = new ObservableCollection<Tile>();
-            _width = _map.Width;
-            _height = _map.Height;
-            GetSprites();
             var zIndex = 0;
 
             foreach (var mapLayer in _map.Layers) {
-                foreach (var tile in mapLayer.Tiles) {
-                    if (tile.Gid == 0) {
-                        continue;
+                if (!mapLayer.Name.Equals("Paths")) {
+                    foreach (var tile in mapLayer.Tiles) {
+                        if (tile.Gid != 0) {
+                            Tiles.Add(new Tile(tile.X * 16, tile.Y * 16, zIndex, 16, 16, _tileImages[tile.Gid]));
+                        }
                     }
-
-                    var a = new Tile();
-                    a.Height = 16;
-                    a.Width = 16;
-                    a.X = tile.X * 16;
-                    a.Y = tile.Y * 16;
-                    a.Z = zIndex;
-
-                    a.Image = _tileImages[tile.Gid];
-                    Tiles.Add(a);
                 }
                 zIndex++;
             }
         }
 
-        private void GetSprites() {
-            for (int i = 0; i < _map.Tilesets.Count; i++) {
-                CutSprites(i);
-            }
-        }
+        private Dictionary<int, BitmapImage> SpritesheetToDictionary(string name, int width, int height, int startOffset = 0) {
+            Dictionary<int, BitmapImage> tiles = new Dictionary<int, BitmapImage>();
+            var spriteSheet = BitmapConverter.ToBitmapImage(new Bitmap(name));
+            var tileId = startOffset;
 
-        private void CutSprites(int i) {
-            var spriteSheet = ToBitmapImage(new Bitmap(_map.Tilesets[i].Image.Source));
-
-            int tileId = _map.Tilesets[i].FirstGid;
-            var width = _map.Tilesets[i].TileWidth;
-            var height = _map.Tilesets[i].TileHeight;
-
-            var xSprites = spriteSheet.PixelWidth/_map.Tilesets[i].TileWidth;
-            var ySprites = spriteSheet.PixelHeight/_map.Tilesets[i].TileHeight;
+            var xSprites = spriteSheet.PixelWidth / width;
+            var ySprites = spriteSheet.PixelHeight / height;
 
             for (var y = 0; y < ySprites; y++) {
                 for (var x = 0; x < xSprites; x++) {
-                    var bitmapSource = new CroppedBitmap(spriteSheet, new Int32Rect(x*width, y*height, width, height)) as BitmapSource;
-                    _tileImages.Add(tileId++, BitmapSourceToImage(bitmapSource));
-
-                    if (i + 1 < _map.Tilesets.Count) {
-                        if (tileId == _map.Tilesets[i + 1].FirstGid) {
-                            return;
-                        }
-                    }
+                    var bitmapSource = new CroppedBitmap(spriteSheet, new Int32Rect(x * width, y * height, width, height)) as BitmapSource;
+                    tiles.Add(tileId++, BitmapConverter.BitmapSourceToImage(bitmapSource)); 
                 }
             }
+
+            return tiles;
         }
 
-        public int Height {
-            get { return _height; }
-            set {
-                if (_height == value) {
-                    return;
-                }
+        private void PopulateMapSpriteDictionary() {
+            _tileImages = new Dictionary<int, BitmapImage>();
 
-                _height = value;
-                RaisePropertyChanged();
+            foreach (var tileset in _map.Tilesets) {
+                var spriteDictionary = SpritesheetToDictionary(tileset.Image.Source, tileset.TileWidth, tileset.TileHeight, tileset.FirstGid);
+                spriteDictionary.ToList().ForEach(x => _tileImages[x.Key] = x.Value);
             }
-        }
-
-        public static BitmapImage ToBitmapImage(Bitmap bitmap) {
-            using (var stream = new MemoryStream()) {
-                bitmap.Save(stream, ImageFormat.Png);
-
-                stream.Position = 0;
-                var result = new BitmapImage();
-                result.BeginInit();
-                // According to MSDN, "The default OnDemand cache option retains access to the stream until the image is needed."
-                // Force the bitmap to load right now so we can dispose the stream.
-                result.CacheOption = BitmapCacheOption.OnLoad;
-                result.StreamSource = stream;
-                result.EndInit();
-                result.Freeze();
-                return result;
-            }
-        }
-
-        public static BitmapImage BitmapSourceToImage(BitmapSource bitmapSource) {
-            //convert image format
-            var src = new FormatConvertedBitmap();
-            src.BeginInit();
-            src.Source = bitmapSource;
-            src.DestinationFormat = PixelFormats.Bgra32;
-            src.EndInit();
-
-            //copy to bitmap
-            var bitmap = new Bitmap(src.PixelWidth, src.PixelHeight, PixelFormat.Format32bppArgb);
-            var data = bitmap.LockBits(new Rectangle(Point.Empty, bitmap.Size), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-            src.CopyPixels(Int32Rect.Empty, data.Scan0, data.Height * data.Stride, data.Stride);
-            bitmap.UnlockBits(data);
-
-            return ToBitmapImage(bitmap);
         }
     }
 }
