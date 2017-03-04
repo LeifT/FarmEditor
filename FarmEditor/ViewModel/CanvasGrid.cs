@@ -20,6 +20,7 @@ namespace FarmEditor.ViewModel {
         private Dictionary<int, BitmapImage> _tileImages;
         private Dictionary<int, BitmapImage> _objectSpriteSheet;
         private Dictionary<int, BitmapImage> _bigCraftablespritesheet;
+        private Dictionary<int, BitmapImage> _lightTexture;
 
         public CanvasGrid() {
             var saves = SaveGame.GetSaves();
@@ -35,6 +36,7 @@ namespace FarmEditor.ViewModel {
 
             _objectSpriteSheet = SpritesheetToDictionary("Maps\\springobjects.png", 16, 16);
             _bigCraftablespritesheet = SpritesheetToDictionary("TileSheets\\Craftables.png", 16, 32);
+            _lightTexture = SpritesheetToDictionary("TerrainFeatures\\hoeDirt.png", 16, 16);
 
             var farm = save.locations.FirstOrDefault(location => location.name.Equals("Farm"));
 
@@ -43,6 +45,15 @@ namespace FarmEditor.ViewModel {
             // TODO: Load Geenhouse
 
             // TODO: Load Dirt
+            
+            foreach (var terrainFeature in farm.terrainFeatures) {
+                var dirt = terrainFeature.Value as StardewValleySave.TerrainFeatures.HoeDirt;
+
+                if (dirt != null) {
+                    Tiles.Add(new Tile(terrainFeature.Key.X * 16, terrainFeature.Key.Y * 16, 2, 16, 16, _lightTexture[0]));
+                }
+                
+            }
 
             // Load Objects
             foreach (var farmObject in farm.objects) {
