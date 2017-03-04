@@ -43,9 +43,9 @@ namespace FarmEditor.ViewModel {
             _save = new SaveGame();
             _save.Load("Leif_147754338");
 
-            Console.WriteLine(SaveGame.loaded.player.money);
+            Console.WriteLine(SaveGame.Loaded.player.money);
 
-            foreach (var playerItem in SaveGame.loaded.player.items) {
+            foreach (var playerItem in SaveGame.Loaded.player.items) {
                 if (playerItem == null) {
                     continue;
                 }
