@@ -92,7 +92,7 @@ namespace FarmEditor.Utils {
                 if (blue > 255) {
                     blue = 255;
                 }
-
+                
                 if (green > 255) {
                     green = 255;
                 }
