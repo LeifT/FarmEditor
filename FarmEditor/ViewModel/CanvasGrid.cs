@@ -19,14 +19,16 @@ using Object = StardewValleySave.Objects.Object;
 namespace FarmEditor.ViewModel {
     public class CanvasGrid : ViewModelBase {
         private readonly TmxMap _map;
-        private Dictionary<int, BitmapImage> _bigCraftablespritesheet;
         private int _canvasHeight;
         private int _canvasWidth;
-        private Dictionary<int, BitmapImage> _cropSpriteSheet;
-        private Dictionary<int, BitmapImage> _dirtTexture;
-        private Dictionary<int, BitmapImage> _grassTexture;
-        private Dictionary<int, BitmapImage> _objectSpriteSheet;
-        private Dictionary<int, BitmapImage> _tileImages;
+
+        private Dictionary<int, BitmapSource> _bigCraftablespritesheet;
+        private Dictionary<int, BitmapSource> _cropSpriteSheet;
+        private Dictionary<int, BitmapSource> _dirtTexture;
+        private Dictionary<int, BitmapSource> _grassTexture;
+        private Dictionary<int, BitmapSource> _objectSpriteSheet;
+        private Dictionary<int, BitmapSource> _tileImages;
+        private Dictionary<int, BitmapSource> _tree1_spring;
         readonly Random _rand = new Random();
         private GameLocation _farm;
 
@@ -97,6 +99,7 @@ namespace FarmEditor.ViewModel {
             _cropSpriteSheet = SpritesheetToDictionary("TileSheets\\crops.png", 16, 32);
             _dirtTexture = SpritesheetToDictionary("TerrainFeatures\\hoeDirt.png", 16, 16);
             _grassTexture = SpritesheetToDictionary("TerrainFeatures\\grass.png", 15, 20);
+            _tree1_spring = SpritesheetToDictionary("TerrainFeatures\\tree1_spring.png", 15, 20);
         }
 
         private void AddTilesToCanvas() {
@@ -132,8 +135,8 @@ namespace FarmEditor.ViewModel {
             }
         }
 
-        private Dictionary<int, BitmapImage> SpritesheetToDictionary(string name, int width, int height, int startOffset = 0) {
-            var tiles = new Dictionary<int, BitmapImage>();
+        private Dictionary<int, BitmapSource> SpritesheetToDictionary(string name, int width, int height, int startOffset = 0) {
+            var tiles = new Dictionary<int, BitmapSource>();
             var spriteSheet = BitmapConverter.BitmapToBitmapImage(new Bitmap(name));
             var tileId = startOffset;
 
@@ -143,7 +146,7 @@ namespace FarmEditor.ViewModel {
             for (var y = 0; y < ySprites; y++) {
                 for (var x = 0; x < xSprites; x++) {
                     var bitmapSource = new CroppedBitmap(spriteSheet, new Int32Rect(x*width, y*height, width, height)) as BitmapSource;
-                    tiles.Add(tileId++, BitmapConverter.BitmapSourceToImage(bitmapSource));
+                    tiles.Add(tileId++, bitmapSource);
                 }
             }
 
@@ -151,7 +154,7 @@ namespace FarmEditor.ViewModel {
         }
 
         private void PopulateMapSprites() {
-            _tileImages = new Dictionary<int, BitmapImage>();
+            _tileImages = new Dictionary<int, BitmapSource>();
 
             foreach (var tileset in _map.Tilesets) {
                 var spriteDictionary = SpritesheetToDictionary(tileset.Image.Source, tileset.TileWidth,
@@ -298,7 +301,7 @@ namespace FarmEditor.ViewModel {
                     }
 
                     // TODO: Improve this
-                    var image = BitmapConverter.BitmapToBitmapImage(BitmapConverter.BitmapImageToBitmap(_cropSpriteSheet[crop.rowInSpriteSheet*8 + growthStage]).ColorTint(crop.tintColor.R, crop.tintColor.G, crop.tintColor.B, crop.tintColor.A));
+                    var image = BitmapConverter.ConvertBitmap(BitmapConverter.BitmapFromSource(_cropSpriteSheet[crop.rowInSpriteSheet*8 + growthStage]).ColorTint(crop.tintColor.R, crop.tintColor.G, crop.tintColor.B, crop.tintColor.A));
                     Tiles.Add(new Tile(location.X*16, location.Y*16 - 16, location.Y * 16 + 16, 16, 32, image));
                 }
             }

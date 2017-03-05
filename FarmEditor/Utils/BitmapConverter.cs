@@ -11,16 +11,16 @@ using Point = System.Drawing.Point;
 
 namespace FarmEditor.Utils {
     internal static class BitmapConverter {
-        public static Bitmap BitmapImageToBitmap(BitmapImage bitmapImage) {
-            using (MemoryStream outStream = new MemoryStream()) {
-                BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(bitmapImage));
-                enc.Save(outStream);
-                Bitmap bitmap = new Bitmap(outStream);
+        //public static Bitmap BitmapImageToBitmap(BitmapImage bitmapImage) {
+        //    using (MemoryStream outStream = new MemoryStream()) {
+        //        BitmapEncoder enc = new BmpBitmapEncoder();
+        //        enc.Frames.Add(BitmapFrame.Create(bitmapImage));
+        //        enc.Save(outStream);
+        //        Bitmap bitmap = new Bitmap(outStream);
 
-                return new Bitmap(bitmap);
-            }
-        }
+        //        return new Bitmap(bitmap);
+        //    }
+        //}
 
         public static BitmapImage BitmapToBitmapImage(Bitmap bitmap) {
             using (var stream = new MemoryStream()) {
@@ -38,23 +38,23 @@ namespace FarmEditor.Utils {
             }
         }
 
-        public static BitmapImage BitmapSourceToImage(BitmapSource bitmapSource) {
+        //public static BitmapImage BitmapSourceToImage(BitmapSource bitmapSource) {
 
-            // Convert image format
-            var src = new FormatConvertedBitmap();
-            src.BeginInit();
-            src.Source = bitmapSource;
-            src.DestinationFormat = PixelFormats.Bgra32;
-            src.EndInit();
+        //    // Convert image format
+        //    var src = new FormatConvertedBitmap();
+        //    src.BeginInit();
+        //    src.Source = bitmapSource;
+        //    src.DestinationFormat = PixelFormats.Bgra32;
+        //    src.EndInit();
 
-            // Copy to bitmap
-            var bitmap = new Bitmap(src.PixelWidth, src.PixelHeight, PixelFormat.Format32bppArgb);
-            var data = bitmap.LockBits(new Rectangle(Point.Empty, bitmap.Size), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-            src.CopyPixels(Int32Rect.Empty, data.Scan0, data.Height*data.Stride, data.Stride);
-            bitmap.UnlockBits(data);
+        //    // Copy to bitmap
+        //    var bitmap = new Bitmap(src.PixelWidth, src.PixelHeight, PixelFormat.Format32bppArgb);
+        //    var data = bitmap.LockBits(new Rectangle(Point.Empty, bitmap.Size), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+        //    src.CopyPixels(Int32Rect.Empty, data.Scan0, data.Height*data.Stride, data.Stride);
+        //    bitmap.UnlockBits(data);
 
-            return BitmapToBitmapImage(bitmap);
-        }
+        //    return BitmapToBitmapImage(bitmap);
+        //}
 
         // Bitmap to BitmapSource
         public static BitmapSource ConvertBitmap(Bitmap source) {
