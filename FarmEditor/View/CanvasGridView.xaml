@@ -23,10 +23,10 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Image Source="{Binding Image}" Width="{Binding Width}" Height="{Binding Height}" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor">
-                        <!--<Image.RenderTransform>
-                            <ScaleTransform ScaleX="{Binding Flip}"/>
-                        </Image.RenderTransform>-->
+                    <Image Source="{Binding Image}" Width="{Binding Width}" Height="{Binding Height}" RenderTransformOrigin="0.5,0.5" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor">
+                        <Image.RenderTransform>
+                            <ScaleTransform ScaleX="{Binding Flipped}"/>
+                        </Image.RenderTransform>
                     </Image>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

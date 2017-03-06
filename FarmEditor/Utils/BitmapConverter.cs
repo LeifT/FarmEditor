@@ -73,6 +73,10 @@ namespace FarmEditor.Utils {
             return bitmap;
         }
 
+        public static BitmapSource ColorTint(this BitmapSource sourceBitmap, float blueTint, float greenTint, float redTint, float alphaTint) {
+            return ConvertBitmap(BitmapFromSource(sourceBitmap).ColorTint(blueTint, greenTint, redTint, alphaTint));
+        }
+
         public static Bitmap ColorTint(this Bitmap sourceBitmap, float blueTint, float greenTint, float redTint, float alphaTint) {
             BitmapData sourceData = sourceBitmap.LockBits(new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             byte[] pixelBuffer = new byte[sourceData.Stride * sourceData.Height];

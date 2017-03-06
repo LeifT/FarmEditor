@@ -45,7 +45,7 @@ namespace FarmEditor.View {
 
         private void GridMouseMove(object sender, MouseEventArgs e) {
             //SelectionBox.Visibility = Visibility.Visible;
-            //Canvas.SetLeft( SelectionBox, (int)e.GetPosition(SelectionGrid).X / 16 * 16);
+            //Canvas.SetLeft(SelectionBox, (int)e.GetPosition(SelectionGrid).X / 16 * 16);
             //Canvas.SetTop(SelectionBox, (int)e.GetPosition(SelectionGrid).Y / 16 * 16);
 
             //SelectionBox.Width = 16;

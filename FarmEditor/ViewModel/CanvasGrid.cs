@@ -55,6 +55,7 @@ namespace FarmEditor.ViewModel {
         private readonly BitmapImage[] _fences = new BitmapImage[5];
 
         private BitmapSource _fruitTrees;
+        private BitmapSource _mouseCursors;
 
         readonly Random _rand = new Random();
         private GameLocation _farm;
@@ -128,6 +129,7 @@ namespace FarmEditor.ViewModel {
             _fences[3] = BitmapConverter.BitmapToBitmapImage(new Bitmap("LooseSprites\\Fence5.png"));
 
             _fruitTrees = BitmapConverter.BitmapToBitmapImage(new Bitmap("TileSheets\\fruitTrees.png"));
+            _mouseCursors = BitmapConverter.BitmapToBitmapImage(new Bitmap("LooseSprites\\Cursors.png"));
         }
 
         private void AddTilesToCanvas() {
@@ -153,13 +155,13 @@ namespace FarmEditor.ViewModel {
                 if (mapLayer.Name.Equals("Front")) {
                     foreach (var tile in mapLayer.Tiles) {
                         if (tile.Gid != 0) {
-                            Tiles.Add(new Tile(tile.X * 16, tile.Y * 16, 16, 16, _tileImages[tile.Gid], tile.Y * 16 + 17));
+                            Tiles.Add(new Tile(tile.X * 16, tile.Y * 16, 16, 16, _tileImages[tile.Gid], false, tile.Y * 16 + 17));
                         }
                     }
                 } else if (!mapLayer.Name.Equals("Paths")) {
                     foreach (var tile in mapLayer.Tiles) {
                         if (tile.Gid != 0) {
-                            Tiles.Add(new Tile(tile.X * 16, tile.Y * 16, 16, 16, _tileImages[tile.Gid], zIndex));
+                            Tiles.Add(new Tile(tile.X * 16, tile.Y * 16, 16, 16, _tileImages[tile.Gid], false, zIndex));
                         }
                     }
                 }
@@ -198,10 +200,10 @@ namespace FarmEditor.ViewModel {
             foreach (var farmObject in gameLocation.objects) {
                 if (farmObject.Value.GetType().IsAssignableFrom(typeof(Object))) {
                     if (farmObject.Value.bigCraftable) {
-                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 32, _bigCraftablespritesheet[farmObject.Value.parentSheetIndex]));
+                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 32, _bigCraftablespritesheet[farmObject.Value.parentSheetIndex], farmObject.Value.flipped));
                     }
                     else {
-                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 16, _objectSpriteSheet[farmObject.Value.parentSheetIndex]));
+                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 16, _objectSpriteSheet[farmObject.Value.parentSheetIndex], farmObject.Value.flipped));
                     }
                     continue;
                 }
@@ -314,7 +316,7 @@ namespace FarmEditor.ViewModel {
                     y = 4 + _rand.Next(-2, 3);
                 }
 
-                Tiles.Add(new Tile(location.X * 16 + x, location.Y * 16 + y, 15, 20, _grassTexture[_rand.Next(3)]));
+                Tiles.Add(new Tile(location.X * 16 + x, location.Y * 16 + y, 15, 20, _grassTexture[_rand.Next(3)], _rand.Next(0,2) == 1));
             }
         }
 
@@ -370,8 +372,7 @@ namespace FarmEditor.ViewModel {
                 var number = (int) location.X * 7 + (int) location.Y * 11;
 
                 if (crop.dead) {
-                    // TODO: Check if it works correctly
-                    Tiles.Add(new Tile(location.X * 16, location.Y* 16 - 16, 16, 32, _cropSpriteSheet[203 + number % 4]));
+                    Tiles.Add(new Tile(location.X * 16, location.Y* 16, 16, 32, _cropSpriteSheet[203 + number % 4], crop.flip));
                     return;
                 }
 
@@ -385,7 +386,7 @@ namespace FarmEditor.ViewModel {
                     }
                 }
 
-                Tiles.Add(new Tile(location.X*16, location.Y*16, 16, 32, _cropSpriteSheet[crop.rowInSpriteSheet*8 + growthStage]));
+                Tiles.Add(new Tile(location.X*16, location.Y*16, 16, 32, _cropSpriteSheet[crop.rowInSpriteSheet*8 + growthStage], crop.flip));
 
                 if (!crop.tintColor.Equals(Color.White) && crop.currentPhase == crop.phaseDays.Count - 1 && !crop.dead) {
                     if (crop.fullyGrown) {
@@ -395,24 +396,29 @@ namespace FarmEditor.ViewModel {
                     }
 
                     // TODO: Improve this
-                    var image = BitmapConverter.ConvertBitmap(BitmapConverter.BitmapFromSource(_cropSpriteSheet[crop.rowInSpriteSheet*8 + growthStage]).ColorTint(crop.tintColor.R, crop.tintColor.G, crop.tintColor.B, crop.tintColor.A));
-                    Tiles.Add(new Tile(location.X*16, location.Y*16, 16, 32, image));
+                    var image = _cropSpriteSheet[crop.rowInSpriteSheet * 8 + growthStage].ColorTint(crop.tintColor.R, crop.tintColor.G, crop.tintColor.B, crop.tintColor.A);
+                    Tiles.Add(new Tile(location.X* 16, location.Y*16, 16, 32, image, crop.flip));
                 }
             }
         }
 
         private void DrawTree(Tree tree, Vector2 location) {
             if (tree.growthStage >= 5) {
-                var image = new CroppedBitmap(_trees[tree.treeType - 1], new Int32Rect(32, 96, 16, 32)) as BitmapSource;
-                Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 32, image));
+                // Stump
+                BitmapSource image = new CroppedBitmap(_trees[tree.treeType - 1], new Int32Rect(32, 96, 16, 32));
+                Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 32, image, tree.flipped));
 
                 if (!tree.stump) {
+                    // Shadow
+                    image = new CroppedBitmap(_mouseCursors, new Int32Rect(663, 1011, 41, 30));
+                    Tiles.Add(new Tile(location.X * 16 - 12.8f, location.Y * 16 + 10, 41, 30, image, tree.flipped));
+
+                    // Tree
                     image = new CroppedBitmap(_trees[tree.treeType - 1], new Int32Rect(0, 0, 48, 96));
-                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 96, image));
+                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 96, image, tree.flipped));
                 }
             } else {
                 Int32Rect sourceRect;
-
                 switch (tree.growthStage) {
                     case 0: 
                         sourceRect = new Int32Rect(32, 128, 16, 16);
@@ -428,54 +434,50 @@ namespace FarmEditor.ViewModel {
                         break;
                 }
 
-                var image = new CroppedBitmap(_trees[tree.treeType - 1], sourceRect) as BitmapSource;
-                Tiles.Add(new Tile(location.X * 16, location.Y * 16, sourceRect.Width, sourceRect.Height, image));
+                BitmapSource image = new CroppedBitmap(_trees[tree.treeType - 1], sourceRect);
+                Tiles.Add(new Tile(location.X * 16, location.Y * 16, sourceRect.Width, sourceRect.Height, image, tree.flipped));
             }
 
             // TODO: Draw leaves
         }
 
         private void DrawFruitTree(FruitTree fruitTree, Vector2 location) {
+            // TODO: Check that this works
+            if (fruitTree.greenHouseTileTree) {
+                var image = new CroppedBitmap(_mouseCursors, new Int32Rect(669, 1957, 16, 16));
+                Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 16, image));
+            }
+
             if (fruitTree.growthStage > 3) {
                 if (fruitTree.stump) {
-                    var image = new CroppedBitmap(_fruitTrees, new Int32Rect(384, fruitTree.treeType*80 + 48, 48, 32));
-                    Tiles.Add(new Tile(location.X*16 - 16, location.Y*16, 48, 32, image));
+                    var image = new CroppedBitmap(_fruitTrees, new Int32Rect(384, fruitTree.treeType * 80 + 48, 48, 32));
+                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 32, image.Source, fruitTree.flipped));
                 } else {
-                    var image = new CroppedBitmap(_fruitTrees, new Int32Rect(fruitTree.greenHouseTree ? 240 : 192, fruitTree.treeType*80, 48, 80));
-                    Tiles.Add(new Tile(location.X*16 - 16, location.Y*16, 48, 80, image));
+                    BitmapSource image;
+                    if (fruitTree.struckByLightningCountdown > 0) {
+                        image = new CroppedBitmap(_fruitTrees, new Int32Rect(fruitTree.greenHouseTree ? 240 : 192, fruitTree.treeType * 80, 48, 80)).ColorTint(Color.Gray.R, Color.Gray.G, Color.Gray.B, Color.Gray.A);
+                    } else {
+                        image = new CroppedBitmap(_fruitTrees, new Int32Rect(fruitTree.greenHouseTree ? 240 : 192, fruitTree.treeType * 80, 48, 80));
+                    }
+                    
+                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 80, image, fruitTree.flipped));
                 }
                
                 if (fruitTree.fruitsOnTree > 0) {
-                    Tiles.Add(new Tile(location.X * 16 - 16 + location.X * 200f % 16 / 2f, location.Y * 16 - 48 - location.X % 16 / 3f, 16, 16, _objectSpriteSheet[fruitTree.struckByLightningCountdown > 0 ? 382 : fruitTree.indexOfFruit], (int)location.Y * 16 + 16));
+                    Tiles.Add(new Tile(location.X * 16 - 16 + location.X * 200f % 16 / 2f, location.Y * 16 - 48 - location.X % 16 / 3f, 16, 16, _objectSpriteSheet[fruitTree.struckByLightningCountdown > 0 ? 382 : fruitTree.indexOfFruit], false, (int)location.Y * 16 + 16));
                 }
 
                 if (fruitTree.fruitsOnTree > 1) {
-                    Tiles.Add(new Tile(location.X * 16 + 8, location.Y * 16 - 64 + location.X * 232f % 16 / 3f, 16, 16, _objectSpriteSheet[fruitTree.struckByLightningCountdown > 0 ? 382 : fruitTree.indexOfFruit], (int)location.Y * 16 + 16));
+                    Tiles.Add(new Tile(location.X * 16 + 8, location.Y * 16 - 64 + location.X * 232f % 16 / 3f, 16, 16, _objectSpriteSheet[fruitTree.struckByLightningCountdown > 0 ? 382 : fruitTree.indexOfFruit], false, (int)location.Y * 16 + 16));
                 }
 
                 if (fruitTree.fruitsOnTree > 2) {
-                    Tiles.Add(new Tile(location.X * 16 + location.X * 200f % 16 / 3f, location.Y * 16 - 40 + location.X * 200f % 16 / 3f, 16, 16, _objectSpriteSheet[fruitTree.struckByLightningCountdown > 0 ? 382 : fruitTree.indexOfFruit], (int)location.Y * 16 + 16));
+                    Tiles.Add(new Tile(location.X * 16 + location.X * 200f % 16 / 3f, location.Y * 16 - 40 + location.X * 200f % 16 / 3f, 16, 16, _objectSpriteSheet[fruitTree.struckByLightningCountdown > 0 ? 382 : fruitTree.indexOfFruit], false, (int)location.Y * 16 + 16));
                 }
             } else {
-                // TODO: Check that this works
-                Int32Rect sourceRect;
-                switch (fruitTree.growthStage) {
-                    case 0:
-                        sourceRect = new Int32Rect(0, fruitTree.treeType * 5 * 16, 48, 80);
-                        break;
-                    case 1:
-                        sourceRect = new Int32Rect(48, fruitTree.treeType * 5 * 16, 48, 80);
-                        break;
-                    case 2:
-                        sourceRect = new Int32Rect(96, fruitTree.treeType * 5 * 16, 48, 80);
-                        break;
-                    default:
-                        sourceRect = new Int32Rect(144, fruitTree.treeType * 5 * 16, 48, 80);
-                        break;
-                }
-
-                var image = new CroppedBitmap(_fruitTrees, sourceRect) as BitmapSource;
-                Tiles.Add(new Tile(location.X * 16, location.Y * 16, sourceRect.Width, sourceRect.Height, image));
+                var offset = (float) Math.Max(-8, Math.Min(16, Math.Sin(location.X*200f/6.28318530717959)*-16));
+                var image = new CroppedBitmap(_fruitTrees, new Int32Rect(fruitTree.growthStage * 48, fruitTree.treeType * 80, 48, 80)) as BitmapSource;
+                Tiles.Add(new Tile(location.X * 16 + offset - 28, location.Y * 16 + offset - 16, 48, 80, image, fruitTree.flipped));
             }
 
             // TODO: Draw leaves

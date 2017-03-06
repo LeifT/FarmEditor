@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight;
 namespace FarmEditor.Model
 {
    public class Tile : ObservableObject {
-        public Tile(double x, double y, double width, double height, BitmapSource image, int z = -1) {
+        public Tile(double x, double y, double width, double height, BitmapSource image, bool flipped = false, int z = -1) {
             X = x;
             Y = y - (height - 16);
             Width = width;
@@ -16,7 +16,8 @@ namespace FarmEditor.Model
             } else {
                 Z = z;
             }
-            
+
+            Flipped = flipped ? -1 : 1;
         }
 
         public double X { get; set; }
@@ -25,5 +26,6 @@ namespace FarmEditor.Model
         public double Width { get; set; }
         public double Height { get; set; }
         public BitmapSource Image { get; set; }
+        public int Flipped { get; set; }
     }
 }
