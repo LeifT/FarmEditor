@@ -11,11 +11,11 @@ using GalaSoft.MvvmLight;
 using Microsoft.Xna.Framework;
 using StardewValleySave;
 using StardewValleySave.Locations;
+using StardewValleySave.Objects;
 using StardewValleySave.TerrainFeatures;
 using TiledSharp;
 using Color = Microsoft.Xna.Framework.Color;
 using Object = StardewValleySave.Objects.Object;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace FarmEditor.ViewModel {
     public class CanvasGrid : ViewModelBase {
@@ -24,6 +24,26 @@ namespace FarmEditor.ViewModel {
         private int _canvasWidth;
 
         private readonly Dictionary<int, int> _dirtmap = new Dictionary<int, int> { { 0000, 0 }, { 0001, 15 }, { 0010, 12 }, { 0011, 11 }, { 0100, 4 }, { 0101, 3 }, { 0110, 8 }, { 0111, 7 }, { 1000, 13 }, { 1001, 14 }, { 1010, 9 }, { 1011, 10 }, { 1100, 1 }, { 1101, 2 }, { 1110, 5 }, { 1111, 6 } };
+
+        private readonly Dictionary<int, int> _fenceMap = new Dictionary<int, int> {
+                { 0000,  5 },
+                { 0001,  9 },
+                { 0010,  3 },
+                { 0011,  8 },
+                { 0100,  5 },
+                { 0101,  2 },
+                { 0110,  3 },
+                { 0111,  2 },
+                { 1000, 10 },
+                { 1001,  7 },
+                { 1010,  6 },
+                { 1011,  7 },
+                { 1100,  0 },
+                { 1101,  4 },
+                { 1110,  0 },
+                { 1111,  4 },
+            };
+
         private Dictionary<int, BitmapSource> _bigCraftablespritesheet;
         private Dictionary<int, BitmapSource> _cropSpriteSheet;
         private Dictionary<int, BitmapSource> _dirtTexture;
@@ -31,7 +51,9 @@ namespace FarmEditor.ViewModel {
         private Dictionary<int, BitmapSource> _objectSpriteSheet;
         private Dictionary<int, BitmapSource> _tileImages;
 
-        private BitmapImage[] _trees_spring = new BitmapImage[3];
+        private readonly BitmapImage[] _treesSpring = new BitmapImage[3];
+        private readonly BitmapImage[] _fences = new BitmapImage[5];
+
 
         readonly Random _rand = new Random();
         private GameLocation _farm;
@@ -39,14 +61,14 @@ namespace FarmEditor.ViewModel {
         public CanvasGrid() {
             var saves = SaveGame.GetSaves();
 
-            var save = SaveGame.LoadSave(saves[3].Filename);
+            var save = SaveGame.LoadSave(saves[1].Filename);
             _map = new TmxMap(string.Concat("Maps\\", Enum.GetName(typeof(Farm.FarmType), save.whichFarm), ".tmx"));
             _farm = save.locations.FirstOrDefault(location => location.name.Equals("Farm"));
 
             _canvasWidth = _map.Width;
             _canvasHeight = _map.Height;
 
-            LoadSprites();
+            PopulateSprites();
             AddTilesToCanvas();
 
             // TODO: Draw FarmHouse
@@ -58,15 +80,7 @@ namespace FarmEditor.ViewModel {
             DrawTerrainFeatures(_farm);
 
             // Load Objects
-            foreach (var farmObject in _farm.objects) {
-                if (farmObject.Value.GetType().IsAssignableFrom(typeof(Object))) {
-                    if (farmObject.Value.bigCraftable) {
-                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 32, _bigCraftablespritesheet[farmObject.Value.parentSheetIndex]));
-                    } else {
-                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 16, _objectSpriteSheet[farmObject.Value.parentSheetIndex]));
-                    }
-                }
-            }
+            DrawObjects(_farm);
         }
 
         public ObservableCollection<Tile> Tiles { get; set; }
@@ -95,7 +109,7 @@ namespace FarmEditor.ViewModel {
             }
         }
 
-        private void LoadSprites() {
+        private void PopulateSprites() {
             PopulateMapSprites();
             _objectSpriteSheet = SpritesheetToDictionary("Maps\\springobjects.png", 16, 16);
             _bigCraftablespritesheet = SpritesheetToDictionary("TileSheets\\Craftables.png", 16, 32);
@@ -103,9 +117,11 @@ namespace FarmEditor.ViewModel {
             _dirtTexture = SpritesheetToDictionary("TerrainFeatures\\hoeDirt.png", 16, 16);
             _grassTexture = SpritesheetToDictionary("TerrainFeatures\\grass.png", 15, 20);
 
-            _trees_spring[0] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree1_spring.png"));
-            _trees_spring[1] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree2_spring.png"));
-            _trees_spring[2] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree3_spring.png"));
+            _treesSpring[0] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree1_spring.png"));
+            _treesSpring[1] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree2_spring.png"));
+            _treesSpring[2] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree3_spring.png"));
+
+            _fences[0] = BitmapConverter.BitmapToBitmapImage(new Bitmap("LooseSprites\\Fence2.png"));
         }
 
         private void AddTilesToCanvas() {
@@ -171,9 +187,82 @@ namespace FarmEditor.ViewModel {
                 spriteDictionary.ToList().ForEach(x => _tileImages[x.Key] = x.Value);
             }
         }
+
+        private void DrawObjects(GameLocation gameLocation) {
+            foreach (var farmObject in gameLocation.objects) {
+                if (farmObject.Value.GetType().IsAssignableFrom(typeof(Object))) {
+                    if (farmObject.Value.bigCraftable) {
+                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 32, _bigCraftablespritesheet[farmObject.Value.parentSheetIndex]));
+                    }
+                    else {
+                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 16, _objectSpriteSheet[farmObject.Value.parentSheetIndex]));
+                    }
+                    continue;
+                }
+
+                Fence fence = farmObject.Value as Fence;
+
+                if (fence != null) {
+                    DrawFence(fence, farmObject.Key);
+                }
+            }
+        }
         
-        private void DrawTerrainFeatures(GameLocation farm) {
-            foreach (var terrainFeature in farm.terrainFeatures) {
+        private void DrawFence(Fence fence, Vector2 location) {
+            int fenceIndex = 1;
+
+            if (fence.health > 1) {
+                int fenceType = 0;
+                var multiplier = 1;
+
+                for (var i = -1; i < 2; i++) {
+                    for (var j = -1; j < 2; j++) {
+                        // Skip corners and middle
+                        if (Math.Abs(i) == Math.Abs(j)) {
+                            continue;
+                        }
+
+                        var neighbourKey = new Vector2(location.X + i, location.Y + j);
+                        Object gameObject;
+
+                        if (_farm.objects.TryGetValue(neighbourKey, out gameObject)) {
+                            var neighbour = gameObject as Fence;
+
+                            if (neighbour != null) {
+                                if (!neighbour.isGate && !(neighbour.health <= 1f) && (fence.whichType == 4 || fence.whichType == neighbour.whichType)) {
+                                    fenceType += multiplier;
+                                    
+                                }
+                            }
+                        }
+                        multiplier = multiplier * 10;
+                    }
+                }
+
+                fenceIndex = _fenceMap[fenceType];
+
+                if (fence.isGate) {
+                    if (fenceType == 110) {
+                        Tiles.Add(new Tile(location.X * 16 + 1, location.Y * 16 -  4, 24, 32, new CroppedBitmap(_fences[0], new Int32Rect(fence.gatePosition == 88 ? 16 : 0, 160, 16, 16))));
+                        Tiles.Add(new Tile(location.X * 16 + 1, location.Y * 16 + 10, 24, 32, new CroppedBitmap(_fences[0], new Int32Rect(fence.gatePosition == 88 ? 16 : 0, 176, 16, 16))));
+                        return;
+                    }
+
+                    if (fenceType == 1001) {
+                        var image = new CroppedBitmap(_fences[0], new Int32Rect(fence.gatePosition == 88 ? 24 : 0, 128, 24, 32));
+                        Tiles.Add(new Tile(location.X * 16 - 4, location.Y * 16, 24, 32, image));
+                        return;
+                    }
+
+                    fenceIndex = 17;
+                }
+            }
+            
+            Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 32, new CroppedBitmap(_fences[0], new Int32Rect(fenceIndex * 16 % (int)_fences[0].Width, fenceIndex * 16 / (int)_fences[0].Width * 32, 16, 32))));
+        }
+
+        private void DrawTerrainFeatures(GameLocation gameLocation) {
+            foreach (var terrainFeature in gameLocation.terrainFeatures) {
                 var hoeDirt = terrainFeature.Value as HoeDirt;
 
                 if (hoeDirt != null)
@@ -184,9 +273,9 @@ namespace FarmEditor.ViewModel {
 
                 var grass = terrainFeature.Value as Grass;
 
-                if (grass != null)
-                {
+                if (grass != null) {
                     DrawGrass(grass, terrainFeature.Key);
+                    continue;
                 }
 
                 // TODO: Draw trees
@@ -302,38 +391,35 @@ namespace FarmEditor.ViewModel {
 
         private void DrawTree(Tree tree, Vector2 location) {
             if (tree.growthStage >= 5) {
-                var image = new CroppedBitmap(_trees_spring[tree.treeType - 1], new Int32Rect(32, 96, 16, 32)) as BitmapSource;
+                var image = new CroppedBitmap(_treesSpring[tree.treeType - 1], new Int32Rect(32, 96, 16, 32)) as BitmapSource;
                 Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 32, image));
                 
                 if (!tree.stump) {
-                    image = new CroppedBitmap(_trees_spring[tree.treeType - 1], new Int32Rect(0, 0, 48, 96));
+                    image = new CroppedBitmap(_treesSpring[tree.treeType - 1], new Int32Rect(0, 0, 48, 96));
                     Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 96, image, (int)location.Y * 16 + 16));
                 }
-            }
-
-            else {
+            } else {
                 Int32Rect sourceRect;
 
                 switch (tree.growthStage) {
-                    case 0: {
-                            sourceRect = new Int32Rect(32, 128, 16, 16);
-                            break;
-                        }
-                    case 1: {
-                            sourceRect = new Int32Rect(0, 128, 16, 16);
-                            break;
-                        }
-                    case 2: {
-                            sourceRect = new Int32Rect(16, 128, 16, 16);
-                            break;
-                        }
-                    default: {
-                            sourceRect = new Int32Rect(0, 96, 16, 32);
-                            break;
-                        }
+                    case 0: 
+                        sourceRect = new Int32Rect(32, 128, 16, 16);
+                        break;
+                        
+                    case 1: 
+                        sourceRect = new Int32Rect(0, 128, 16, 16);
+                        break;
+                        
+                    case 2: 
+                        sourceRect = new Int32Rect(16, 128, 16, 16);
+                        break;
+                        
+                    default: 
+                        sourceRect = new Int32Rect(0, 96, 16, 32);
+                        break;
                 }
 
-                var image = new CroppedBitmap(_trees_spring[tree.treeType - 1], sourceRect) as BitmapSource;
+                var image = new CroppedBitmap(_treesSpring[tree.treeType - 1], sourceRect) as BitmapSource;
                 Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, sourceRect.Height, image));
             }
         }

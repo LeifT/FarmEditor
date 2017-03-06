@@ -196,6 +196,12 @@
   <ItemGroup>
     <Resource Include="TerrainFeatures\tree1_spring.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="LooseSprites\Fence1.png" />
+    <Resource Include="LooseSprites\Fence2.png" />
+    <Resource Include="LooseSprites\Fence3.png" />
+    <Resource Include="LooseSprites\Fence5.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
