@@ -10,13 +10,7 @@ namespace FarmEditor.Model
             Width = width;
             Height = height;
             Image = image;
-
-            if (z == -1) {
-                Z = Y + height;
-            } else {
-                Z = z;
-            }
-
+            Z = z == -1 ? Y + Height : z;
             Flipped = flipped ? -1 : 1;
         }
 

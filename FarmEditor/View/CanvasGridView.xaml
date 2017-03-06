@@ -7,11 +7,14 @@
         mc:Ignorable="d ignore"
         DataContext="{Binding Grid, Source={StaticResource Locator}}">
 
-    <Grid x:Name="SelectionGrid" MouseDown="GridMouseDown" MouseUp="GridMouseUp" MouseMove="GridMouseMove">
+    <Grid x:Name="SelectionGrid">
         <ItemsControl ItemsSource="{Binding Tiles}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas IsItemsHost="True"/>
+                    <Canvas Loaded="Canvas_Loaded" 
+                            MouseLeftButtonDown="CanvasMouseLeftButtonDown"
+                            MouseLeftButtonUp="CanvasMouseLeftButtonUp"
+                            MouseMove="CanvasMouseMove"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
@@ -31,8 +34,8 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Canvas>
+        <!--<Canvas>
             <Rectangle x:Name="SelectionBox" Visibility="Collapsed" Stroke="DarkBlue" StrokeThickness="1" Fill="#330000FF"/>
-        </Canvas>
+        </Canvas>-->
     </Grid>
 </UserControl>

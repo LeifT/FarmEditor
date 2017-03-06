@@ -214,6 +214,25 @@
   <ItemGroup>
     <Resource Include="LooseSprites\Cursors.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Buildings\Barn.png" />
+    <Resource Include="Buildings\Big Barn.png" />
+    <Resource Include="Buildings\Big Coop.png" />
+    <Resource Include="Buildings\Coop.png" />
+    <Resource Include="Buildings\Deluxe Barn.png" />
+    <Resource Include="Buildings\Deluxe Coop.png" />
+    <Resource Include="Buildings\Earth Obelisk.png" />
+    <Resource Include="Buildings\Gold Clock.png" />
+    <Resource Include="Buildings\houses.png" />
+    <Resource Include="Buildings\Junimo Hut.png" />
+    <Resource Include="Buildings\Mill.png" />
+    <Resource Include="Buildings\Shed.png" />
+    <Resource Include="Buildings\Silo.png" />
+    <Resource Include="Buildings\Slime Hutch.png" />
+    <Resource Include="Buildings\Stable.png" />
+    <Resource Include="Buildings\Water Obelisk.png" />
+    <Resource Include="Buildings\Well.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

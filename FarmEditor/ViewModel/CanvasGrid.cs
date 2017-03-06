@@ -10,6 +10,7 @@ using FarmEditor.Utils;
 using GalaSoft.MvvmLight;
 using Microsoft.Xna.Framework;
 using StardewValleySave;
+using StardewValleySave.Buildings;
 using StardewValleySave.Locations;
 using StardewValleySave.Objects;
 using StardewValleySave.TerrainFeatures;
@@ -56,16 +57,18 @@ namespace FarmEditor.ViewModel {
 
         private BitmapSource _fruitTrees;
         private BitmapSource _mouseCursors;
+        private BitmapSource _barnTexture;
+        private BitmapSource _deluxeBarnTexture;
 
         readonly Random _rand = new Random();
-        private GameLocation _farm;
+        private Farm _farm;
 
         public CanvasGrid() {
             var saves = SaveGame.GetSaves();
 
             var save = SaveGame.LoadSave(saves[1].Filename);
             _map = new TmxMap(string.Concat("Maps\\", Enum.GetName(typeof(Farm.FarmType), save.whichFarm), ".tmx"));
-            _farm = save.locations.FirstOrDefault(location => location.name.Equals("Farm"));
+            _farm = save.locations.FirstOrDefault(location => location.name.Equals("Farm")) as Farm;
 
             _canvasWidth = _map.Width;
             _canvasHeight = _map.Height;
@@ -78,6 +81,7 @@ namespace FarmEditor.ViewModel {
             // TODO: Draw Greenhouse
 
             // TODO: Draw Buildings
+            DrawBuildings(_farm);
 
             DrawTerrainFeatures(_farm);
 
@@ -130,6 +134,11 @@ namespace FarmEditor.ViewModel {
 
             _fruitTrees = BitmapConverter.BitmapToBitmapImage(new Bitmap("TileSheets\\fruitTrees.png"));
             _mouseCursors = BitmapConverter.BitmapToBitmapImage(new Bitmap("LooseSprites\\Cursors.png"));
+
+            _barnTexture = BitmapConverter.BitmapToBitmapImage(new Bitmap("Buildings\\Barn.png"));
+            _deluxeBarnTexture = BitmapConverter.BitmapToBitmapImage(new Bitmap("Buildings\\Deluxe Barn.png"));
+
+
         }
 
         private void AddTilesToCanvas() {
@@ -196,11 +205,52 @@ namespace FarmEditor.ViewModel {
             }
         }
 
+        private void DrawBuildings(BuildableGameLocation gameLocation) {
+
+            foreach (var building in gameLocation.buildings) {
+
+                var barn = building as Barn;
+
+                if (barn != null) {
+                    DrawBarn(barn);
+                }
+            }
+        }
+
+        private void DrawBarn(Barn barn) {
+            if (barn.daysOfConstructionLeft > 0) {
+                // TODO: Draw under constrcution
+                return;
+            }
+
+            // TODO: Draw Shadow
+            
+            var location = new Vector2(barn.tileX + barn.animalDoor.X, barn.tileY + barn.animalDoor.Y - 1) * 16;
+            BitmapSource image = new CroppedBitmap(_deluxeBarnTexture, new Int32Rect(32, 112, 32, 16));
+            Tiles.Add(new Tile(location.X, location.Y, image.Width, image.Height, image));
+
+            location = new Vector2(barn.tileX + barn.animalDoor.X, barn.tileY + barn.animalDoor.Y) * 16;
+            image = new CroppedBitmap(_deluxeBarnTexture, new Int32Rect(64, 112, 32, 16));
+            Tiles.Add(new Tile(location.X, location.Y, image.Width, image.Height, image));
+
+            location = new Vector2((barn.tileX + barn.animalDoor.X) * 16, (barn.tileY + barn.animalDoor.Y) * 16 - 31);
+            image = new CroppedBitmap(_deluxeBarnTexture, new Int32Rect(0, 112, 32, 16));
+            Tiles.Add(new Tile(location.X, location.Y, image.Width, image.Height, image, false, barn.tileY * 16 + barn.tilesHigh * 16));
+            
+            location = new Vector2((barn.tileX + barn.animalDoor.X) * 16, (barn.tileY + barn.animalDoor.Y) * 16 - 19);
+            image = new CroppedBitmap(_deluxeBarnTexture, new Int32Rect(0, 112, 32, 16));
+            Tiles.Add(new Tile(location.X, location.Y, image.Width, image.Height, image, false, barn.tileY * 16 + barn.tilesHigh * 16));
+
+            location = new Vector2(barn.tileX * 16, barn.tileY * 16 + barn.tilesHigh * 16);
+            image = new CroppedBitmap(_deluxeBarnTexture, new Int32Rect(0, 0, 112, 112));
+            Tiles.Add(new Tile(location.X, location.Y - 16, image.Width, image.Height, image));
+        }
+
         private void DrawObjects(GameLocation gameLocation) {
             foreach (var farmObject in gameLocation.objects) {
                 if (farmObject.Value.GetType().IsAssignableFrom(typeof(Object))) {
                     if (farmObject.Value.bigCraftable) {
-                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 32, _bigCraftablespritesheet[farmObject.Value.parentSheetIndex], farmObject.Value.flipped));
+                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 32, _bigCraftablespritesheet[farmObject.Value.parentSheetIndex]));
                     }
                     else {
                         Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 16, _objectSpriteSheet[farmObject.Value.parentSheetIndex], farmObject.Value.flipped));
