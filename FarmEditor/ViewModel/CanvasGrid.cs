@@ -15,6 +15,7 @@ using StardewValleySave.TerrainFeatures;
 using TiledSharp;
 using Color = Microsoft.Xna.Framework.Color;
 using Object = StardewValleySave.Objects.Object;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace FarmEditor.ViewModel {
     public class CanvasGrid : ViewModelBase {
@@ -22,29 +23,31 @@ namespace FarmEditor.ViewModel {
         private int _canvasHeight;
         private int _canvasWidth;
 
+        private readonly Dictionary<int, int> _dirtmap = new Dictionary<int, int> { { 0000, 0 }, { 0001, 15 }, { 0010, 12 }, { 0011, 11 }, { 0100, 4 }, { 0101, 3 }, { 0110, 8 }, { 0111, 7 }, { 1000, 13 }, { 1001, 14 }, { 1010, 9 }, { 1011, 10 }, { 1100, 1 }, { 1101, 2 }, { 1110, 5 }, { 1111, 6 } };
         private Dictionary<int, BitmapSource> _bigCraftablespritesheet;
         private Dictionary<int, BitmapSource> _cropSpriteSheet;
         private Dictionary<int, BitmapSource> _dirtTexture;
         private Dictionary<int, BitmapSource> _grassTexture;
         private Dictionary<int, BitmapSource> _objectSpriteSheet;
         private Dictionary<int, BitmapSource> _tileImages;
-        private Dictionary<int, BitmapSource> _tree1_spring;
+
+        private BitmapImage[] _trees_spring = new BitmapImage[3];
+
         readonly Random _rand = new Random();
         private GameLocation _farm;
 
         public CanvasGrid() {
             var saves = SaveGame.GetSaves();
 
-            var save = SaveGame.LoadSave(saves[1].Filename);
+            var save = SaveGame.LoadSave(saves[3].Filename);
             _map = new TmxMap(string.Concat("Maps\\", Enum.GetName(typeof(Farm.FarmType), save.whichFarm), ".tmx"));
+            _farm = save.locations.FirstOrDefault(location => location.name.Equals("Farm"));
 
             _canvasWidth = _map.Width;
             _canvasHeight = _map.Height;
 
             LoadSprites();
             AddTilesToCanvas();
-
-            _farm = save.locations.FirstOrDefault(location => location.name.Equals("Farm"));
 
             // TODO: Draw FarmHouse
 
@@ -58,9 +61,9 @@ namespace FarmEditor.ViewModel {
             foreach (var farmObject in _farm.objects) {
                 if (farmObject.Value.GetType().IsAssignableFrom(typeof(Object))) {
                     if (farmObject.Value.bigCraftable) {
-                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X*16, farmObject.Value.tileLocation.Y * 16 - 16, farmObject.Value.tileLocation.Y * 16 + 16, 16, 32, _bigCraftablespritesheet[farmObject.Value.parentSheetIndex]));
+                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 32, _bigCraftablespritesheet[farmObject.Value.parentSheetIndex]));
                     } else {
-                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X*16, farmObject.Value.tileLocation.Y * 16, farmObject.Value.tileLocation.Y * 16 + 16, 16, 16, _objectSpriteSheet[farmObject.Value.parentSheetIndex]));
+                        Tiles.Add(new Tile(farmObject.Value.tileLocation.X * 16, farmObject.Value.tileLocation.Y * 16, 16, 16, _objectSpriteSheet[farmObject.Value.parentSheetIndex]));
                     }
                 }
             }
@@ -99,39 +102,45 @@ namespace FarmEditor.ViewModel {
             _cropSpriteSheet = SpritesheetToDictionary("TileSheets\\crops.png", 16, 32);
             _dirtTexture = SpritesheetToDictionary("TerrainFeatures\\hoeDirt.png", 16, 16);
             _grassTexture = SpritesheetToDictionary("TerrainFeatures\\grass.png", 15, 20);
-            _tree1_spring = SpritesheetToDictionary("TerrainFeatures\\tree1_spring.png", 15, 20);
+
+            _trees_spring[0] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree1_spring.png"));
+            _trees_spring[1] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree2_spring.png"));
+            _trees_spring[2] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree3_spring.png"));
         }
 
         private void AddTilesToCanvas() {
             Tiles = new ObservableCollection<Tile>();
-            var layer = 0;
             var zIndex = 0;
 
             foreach (var mapLayer in _map.Layers) {
-                switch (layer) {
-                    case 0:
+                switch (mapLayer.Name) {
+                    case "Back":
                         zIndex = int.MinValue;
                         break;
-                    case 1:
+                    case "Buildings":
                         zIndex = int.MinValue + 1;
                         break;
-
-                    case 2:
-                        zIndex = int.MaxValue - 1;
+                    case "Front":
+                        zIndex = -1;
                         break;
-                    case 3:
+                    case "AlwaysFront":
                         zIndex = int.MaxValue;
                         break;
                 }
 
-                if (!mapLayer.Name.Equals("Paths")) {
+                if (mapLayer.Name.Equals("Front")) {
                     foreach (var tile in mapLayer.Tiles) {
                         if (tile.Gid != 0) {
-                            Tiles.Add(new Tile(tile.X*16, tile.Y*16, zIndex, 16, 16, _tileImages[tile.Gid]));
+                            Tiles.Add(new Tile(tile.X * 16, tile.Y * 16, 16, 16, _tileImages[tile.Gid], tile.Y * 16 + 17));
+                        }
+                    }
+                } else if (!mapLayer.Name.Equals("Paths")) {
+                    foreach (var tile in mapLayer.Tiles) {
+                        if (tile.Gid != 0) {
+                            Tiles.Add(new Tile(tile.X * 16, tile.Y * 16, 16, 16, _tileImages[tile.Gid], zIndex));
                         }
                     }
                 }
-                layer++;
             }
         }
 
@@ -162,48 +171,32 @@ namespace FarmEditor.ViewModel {
                 spriteDictionary.ToList().ForEach(x => _tileImages[x.Key] = x.Value);
             }
         }
-
-        readonly Dictionary<int, int> _dirtmap = new Dictionary<int, int> {
-                {0000, 0},
-                {0001, 15},
-                {0010, 12},
-                {0011, 11},
-                {0100, 4},
-                {0101, 3},
-                {0110, 8},
-                {0111, 7},
-                {1000, 13},
-                {1001, 14},
-                {1010, 9},
-                {1011, 10},
-                {1100, 1},
-                {1101, 2},
-                {1110, 5},
-                {1111, 6}
-            };
-
+        
         private void DrawTerrainFeatures(GameLocation farm) {
             foreach (var terrainFeature in farm.terrainFeatures) {
                 var hoeDirt = terrainFeature.Value as HoeDirt;
 
-                if (hoeDirt != null) {
+                if (hoeDirt != null)
+                {
                     DrawDirt(hoeDirt, terrainFeature.Key);
                     continue;
                 }
 
                 var grass = terrainFeature.Value as Grass;
 
-                if (grass != null) {
+                if (grass != null)
+                {
                     DrawGrass(grass, terrainFeature.Key);
                 }
 
+                // TODO: Draw trees
                 var tree = terrainFeature.Value as Tree;
 
                 if (tree != null) {
-                    
+                    DrawTree(tree, terrainFeature.Key);
                 }
 
-                // TODO: Draw trees
+                // TODO: Draw FruitTree
             }
         }
 
@@ -220,7 +213,7 @@ namespace FarmEditor.ViewModel {
                     y = 4 + _rand.Next(-2, 3);
                 }
 
-                Tiles.Add(new Tile(location.X * 16 + x, location.Y * 16 + y - 4, location.Y * 16 + 16 + y, 15, 20, _grassTexture[_rand.Next(3)]));
+                Tiles.Add(new Tile(location.X * 16 + x, location.Y * 16 + y, 15, 20, _grassTexture[_rand.Next(3)]));
             }
         }
 
@@ -256,12 +249,12 @@ namespace FarmEditor.ViewModel {
 
             // Draw hoed dirt
             var spritesheetIndex = _dirtmap[hoed] / 4 * 4 + _dirtmap[hoed];
-            Tiles.Add(new Tile(location.X * 16, location.Y * 16, location.Y * 16, 16, 16, _dirtTexture[spritesheetIndex]));
+            Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 16, _dirtTexture[spritesheetIndex]));
 
             // Draw watered hoed dirt
             if (hoeDirt.state == 1) {
                 spritesheetIndex = _dirtmap[watered] / 4 * 4 + _dirtmap[watered] + 4;
-                Tiles.Add(new Tile(location.X * 16, location.Y * 16, location.Y * 16, 16, 16, _dirtTexture[spritesheetIndex]));
+                Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 16, _dirtTexture[spritesheetIndex]));
             }
 
             // TODO: Draw fertilizer
@@ -277,7 +270,7 @@ namespace FarmEditor.ViewModel {
 
                 if (crop.dead) {
                     // TODO: Check if it works correctly
-                    Tiles.Add(new Tile(location.X * 16, location.Y* 16 - 16, location.Y * 16 + 16, 16, 32, _cropSpriteSheet[203 + number % 4]));
+                    Tiles.Add(new Tile(location.X * 16, location.Y* 16 - 16, 16, 32, _cropSpriteSheet[203 + number % 4]));
                     return;
                 }
 
@@ -291,7 +284,7 @@ namespace FarmEditor.ViewModel {
                     }
                 }
 
-                Tiles.Add(new Tile(location.X*16, location.Y*16 - 16, location.Y * 16 + 16, 16, 32, _cropSpriteSheet[crop.rowInSpriteSheet*8 + growthStage]));
+                Tiles.Add(new Tile(location.X*16, location.Y*16, 16, 32, _cropSpriteSheet[crop.rowInSpriteSheet*8 + growthStage]));
 
                 if (!crop.tintColor.Equals(Color.White) && crop.currentPhase == crop.phaseDays.Count - 1 && !crop.dead) {
                     if (crop.fullyGrown) {
@@ -302,8 +295,46 @@ namespace FarmEditor.ViewModel {
 
                     // TODO: Improve this
                     var image = BitmapConverter.ConvertBitmap(BitmapConverter.BitmapFromSource(_cropSpriteSheet[crop.rowInSpriteSheet*8 + growthStage]).ColorTint(crop.tintColor.R, crop.tintColor.G, crop.tintColor.B, crop.tintColor.A));
-                    Tiles.Add(new Tile(location.X*16, location.Y*16 - 16, location.Y * 16 + 16, 16, 32, image));
+                    Tiles.Add(new Tile(location.X*16, location.Y*16, 16, 32, image));
                 }
+            }
+        }
+
+        private void DrawTree(Tree tree, Vector2 location) {
+            if (tree.growthStage >= 5) {
+                var image = new CroppedBitmap(_trees_spring[tree.treeType - 1], new Int32Rect(32, 96, 16, 32)) as BitmapSource;
+                Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 32, image));
+                
+                if (!tree.stump) {
+                    image = new CroppedBitmap(_trees_spring[tree.treeType - 1], new Int32Rect(0, 0, 48, 96));
+                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 96, image, (int)location.Y * 16 + 16));
+                }
+            }
+
+            else {
+                Int32Rect sourceRect;
+
+                switch (tree.growthStage) {
+                    case 0: {
+                            sourceRect = new Int32Rect(32, 128, 16, 16);
+                            break;
+                        }
+                    case 1: {
+                            sourceRect = new Int32Rect(0, 128, 16, 16);
+                            break;
+                        }
+                    case 2: {
+                            sourceRect = new Int32Rect(16, 128, 16, 16);
+                            break;
+                        }
+                    default: {
+                            sourceRect = new Int32Rect(0, 96, 16, 32);
+                            break;
+                        }
+                }
+
+                var image = new CroppedBitmap(_trees_spring[tree.treeType - 1], sourceRect) as BitmapSource;
+                Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, sourceRect.Height, image));
             }
         }
     }

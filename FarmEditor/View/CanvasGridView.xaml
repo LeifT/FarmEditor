@@ -24,9 +24,9 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Image Source="{Binding Image}" Width="{Binding Width}" Height="{Binding Height}" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor">
-                        <Image.RenderTransform>
+                        <!--<Image.RenderTransform>
                             <ScaleTransform ScaleX="{Binding Flip}"/>
-                        </Image.RenderTransform>
+                        </Image.RenderTransform>-->
                     </Image>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
