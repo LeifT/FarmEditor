@@ -16,7 +16,6 @@ using StardewValleySave.TerrainFeatures;
 using TiledSharp;
 using Color = Microsoft.Xna.Framework.Color;
 using Object = StardewValleySave.Objects.Object;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace FarmEditor.ViewModel {
     public class CanvasGrid : ViewModelBase {
@@ -294,7 +293,6 @@ namespace FarmEditor.ViewModel {
 
                 if (fruitTree != null) {
                     DrawFruitTree(fruitTree, terrainFeature.Key);
-                    continue;
                 }
 
                 //TODO: Draw Flooring
@@ -410,7 +408,7 @@ namespace FarmEditor.ViewModel {
 
                 if (!tree.stump) {
                     image = new CroppedBitmap(_trees[tree.treeType - 1], new Int32Rect(0, 0, 48, 96));
-                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 96, image, (int)location.Y * 16 + 16));
+                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 96, image));
                 }
             } else {
                 Int32Rect sourceRect;
@@ -419,36 +417,68 @@ namespace FarmEditor.ViewModel {
                     case 0: 
                         sourceRect = new Int32Rect(32, 128, 16, 16);
                         break;
-                        
                     case 1: 
                         sourceRect = new Int32Rect(0, 128, 16, 16);
                         break;
-                        
                     case 2: 
                         sourceRect = new Int32Rect(16, 128, 16, 16);
                         break;
-                        
                     default: 
                         sourceRect = new Int32Rect(0, 96, 16, 32);
                         break;
                 }
 
                 var image = new CroppedBitmap(_trees[tree.treeType - 1], sourceRect) as BitmapSource;
-                Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, sourceRect.Height, image));
+                Tiles.Add(new Tile(location.X * 16, location.Y * 16, sourceRect.Width, sourceRect.Height, image));
             }
+
+            // TODO: Draw leaves
         }
 
         private void DrawFruitTree(FruitTree fruitTree, Vector2 location) {
             if (fruitTree.growthStage > 3) {
                 if (fruitTree.stump) {
-                    var image = new CroppedBitmap(_fruitTrees, new Int32Rect(384, fruitTree.treeType * 80 + 48, 48, 32));
-                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 32, image));
+                    var image = new CroppedBitmap(_fruitTrees, new Int32Rect(384, fruitTree.treeType*80 + 48, 48, 32));
+                    Tiles.Add(new Tile(location.X*16 - 16, location.Y*16, 48, 32, image));
                 } else {
-                    // Tree
-                    var image = new CroppedBitmap(_fruitTrees, new Int32Rect(fruitTree.greenHouseTree ? 240 : 192, fruitTree.treeType * 80, 48, 80));
-                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 80, image));
+                    var image = new CroppedBitmap(_fruitTrees, new Int32Rect(fruitTree.greenHouseTree ? 240 : 192, fruitTree.treeType*80, 48, 80));
+                    Tiles.Add(new Tile(location.X*16 - 16, location.Y*16, 48, 80, image));
                 }
+               
+                if (fruitTree.fruitsOnTree > 0) {
+                    Tiles.Add(new Tile(location.X * 16 - 16 + location.X * 200f % 16 / 2f, location.Y * 16 - 48 - location.X % 16 / 3f, 16, 16, _objectSpriteSheet[fruitTree.struckByLightningCountdown > 0 ? 382 : fruitTree.indexOfFruit], (int)location.Y * 16 + 16));
+                }
+
+                if (fruitTree.fruitsOnTree > 1) {
+                    Tiles.Add(new Tile(location.X * 16 + 8, location.Y * 16 - 64 + location.X * 232f % 16 / 3f, 16, 16, _objectSpriteSheet[fruitTree.struckByLightningCountdown > 0 ? 382 : fruitTree.indexOfFruit], (int)location.Y * 16 + 16));
+                }
+
+                if (fruitTree.fruitsOnTree > 2) {
+                    Tiles.Add(new Tile(location.X * 16 + location.X * 200f % 16 / 3f, location.Y * 16 - 40 + location.X * 200f % 16 / 3f, 16, 16, _objectSpriteSheet[fruitTree.struckByLightningCountdown > 0 ? 382 : fruitTree.indexOfFruit], (int)location.Y * 16 + 16));
+                }
+            } else {
+                // TODO: Check that this works
+                Int32Rect sourceRect;
+                switch (fruitTree.growthStage) {
+                    case 0:
+                        sourceRect = new Int32Rect(0, fruitTree.treeType * 5 * 16, 48, 80);
+                        break;
+                    case 1:
+                        sourceRect = new Int32Rect(48, fruitTree.treeType * 5 * 16, 48, 80);
+                        break;
+                    case 2:
+                        sourceRect = new Int32Rect(96, fruitTree.treeType * 5 * 16, 48, 80);
+                        break;
+                    default:
+                        sourceRect = new Int32Rect(144, fruitTree.treeType * 5 * 16, 48, 80);
+                        break;
+                }
+
+                var image = new CroppedBitmap(_fruitTrees, sourceRect) as BitmapSource;
+                Tiles.Add(new Tile(location.X * 16, location.Y * 16, sourceRect.Width, sourceRect.Height, image));
             }
+
+            // TODO: Draw leaves
         }
     }
 }
