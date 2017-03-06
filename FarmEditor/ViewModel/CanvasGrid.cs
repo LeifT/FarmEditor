@@ -16,6 +16,7 @@ using StardewValleySave.TerrainFeatures;
 using TiledSharp;
 using Color = Microsoft.Xna.Framework.Color;
 using Object = StardewValleySave.Objects.Object;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace FarmEditor.ViewModel {
     public class CanvasGrid : ViewModelBase {
@@ -51,9 +52,10 @@ namespace FarmEditor.ViewModel {
         private Dictionary<int, BitmapSource> _objectSpriteSheet;
         private Dictionary<int, BitmapSource> _tileImages;
 
-        private readonly BitmapImage[] _treesSpring = new BitmapImage[3];
+        private readonly BitmapImage[] _trees = new BitmapImage[3];
         private readonly BitmapImage[] _fences = new BitmapImage[5];
 
+        private BitmapSource _fruitTrees;
 
         readonly Random _rand = new Random();
         private GameLocation _farm;
@@ -117,11 +119,16 @@ namespace FarmEditor.ViewModel {
             _dirtTexture = SpritesheetToDictionary("TerrainFeatures\\hoeDirt.png", 16, 16);
             _grassTexture = SpritesheetToDictionary("TerrainFeatures\\grass.png", 15, 20);
 
-            _treesSpring[0] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree1_spring.png"));
-            _treesSpring[1] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree2_spring.png"));
-            _treesSpring[2] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree3_spring.png"));
+            _trees[0] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree1_spring.png"));
+            _trees[1] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree2_spring.png"));
+            _trees[2] = BitmapConverter.BitmapToBitmapImage(new Bitmap("TerrainFeatures\\tree3_spring.png"));
 
-            _fences[0] = BitmapConverter.BitmapToBitmapImage(new Bitmap("LooseSprites\\Fence2.png"));
+            _fences[0] = BitmapConverter.BitmapToBitmapImage(new Bitmap("LooseSprites\\Fence1.png"));
+            _fences[1] = BitmapConverter.BitmapToBitmapImage(new Bitmap("LooseSprites\\Fence2.png"));
+            _fences[2] = BitmapConverter.BitmapToBitmapImage(new Bitmap("LooseSprites\\Fence3.png"));
+            _fences[3] = BitmapConverter.BitmapToBitmapImage(new Bitmap("LooseSprites\\Fence5.png"));
+
+            _fruitTrees = BitmapConverter.BitmapToBitmapImage(new Bitmap("TileSheets\\fruitTrees.png"));
         }
 
         private void AddTilesToCanvas() {
@@ -238,7 +245,6 @@ namespace FarmEditor.ViewModel {
                         multiplier = multiplier * 10;
                     }
                 }
-
                 fenceIndex = _fenceMap[fenceType];
 
                 if (fence.isGate) {
@@ -253,20 +259,19 @@ namespace FarmEditor.ViewModel {
                         Tiles.Add(new Tile(location.X * 16 - 4, location.Y * 16, 24, 32, image));
                         return;
                     }
-
                     fenceIndex = 17;
                 }
+
+                // TODO Draw object on top
             }
-            
-            Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 32, new CroppedBitmap(_fences[0], new Int32Rect(fenceIndex * 16 % (int)_fences[0].Width, fenceIndex * 16 / (int)_fences[0].Width * 32, 16, 32))));
+            Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 32, new CroppedBitmap(_fences[fence.whichType - 1], new Int32Rect(fenceIndex * 16 % (int)_fences[0].Width, fenceIndex * 16 / (int)_fences[0].Width * 32, 16, 32))));
         }
 
         private void DrawTerrainFeatures(GameLocation gameLocation) {
             foreach (var terrainFeature in gameLocation.terrainFeatures) {
                 var hoeDirt = terrainFeature.Value as HoeDirt;
 
-                if (hoeDirt != null)
-                {
+                if (hoeDirt != null) {
                     DrawDirt(hoeDirt, terrainFeature.Key);
                     continue;
                 }
@@ -278,14 +283,23 @@ namespace FarmEditor.ViewModel {
                     continue;
                 }
 
-                // TODO: Draw trees
                 var tree = terrainFeature.Value as Tree;
 
                 if (tree != null) {
                     DrawTree(tree, terrainFeature.Key);
+                    continue;
+                }
+                
+                var fruitTree = terrainFeature.Value as FruitTree;
+
+                if (fruitTree != null) {
+                    DrawFruitTree(fruitTree, terrainFeature.Key);
+                    continue;
                 }
 
-                // TODO: Draw FruitTree
+                //TODO: Draw Flooring
+
+                //TODO: Draw GiantCrop
             }
         }
 
@@ -391,11 +405,11 @@ namespace FarmEditor.ViewModel {
 
         private void DrawTree(Tree tree, Vector2 location) {
             if (tree.growthStage >= 5) {
-                var image = new CroppedBitmap(_treesSpring[tree.treeType - 1], new Int32Rect(32, 96, 16, 32)) as BitmapSource;
+                var image = new CroppedBitmap(_trees[tree.treeType - 1], new Int32Rect(32, 96, 16, 32)) as BitmapSource;
                 Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, 32, image));
-                
+
                 if (!tree.stump) {
-                    image = new CroppedBitmap(_treesSpring[tree.treeType - 1], new Int32Rect(0, 0, 48, 96));
+                    image = new CroppedBitmap(_trees[tree.treeType - 1], new Int32Rect(0, 0, 48, 96));
                     Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 96, image, (int)location.Y * 16 + 16));
                 }
             } else {
@@ -419,8 +433,21 @@ namespace FarmEditor.ViewModel {
                         break;
                 }
 
-                var image = new CroppedBitmap(_treesSpring[tree.treeType - 1], sourceRect) as BitmapSource;
+                var image = new CroppedBitmap(_trees[tree.treeType - 1], sourceRect) as BitmapSource;
                 Tiles.Add(new Tile(location.X * 16, location.Y * 16, 16, sourceRect.Height, image));
+            }
+        }
+
+        private void DrawFruitTree(FruitTree fruitTree, Vector2 location) {
+            if (fruitTree.growthStage > 3) {
+                if (fruitTree.stump) {
+                    var image = new CroppedBitmap(_fruitTrees, new Int32Rect(384, fruitTree.treeType * 80 + 48, 48, 32));
+                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 32, image));
+                } else {
+                    // Tree
+                    var image = new CroppedBitmap(_fruitTrees, new Int32Rect(fruitTree.greenHouseTree ? 240 : 192, fruitTree.treeType * 80, 48, 80));
+                    Tiles.Add(new Tile(location.X * 16 - 16, location.Y * 16, 48, 80, image));
+                }
             }
         }
     }
