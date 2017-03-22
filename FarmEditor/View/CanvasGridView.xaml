@@ -4,17 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:utils="clr-namespace:FarmEditor.Utils"
         mc:Ignorable="d ignore"
         DataContext="{Binding Grid, Source={StaticResource Locator}}">
 
+
     <Grid x:Name="SelectionGrid">
+        <!--<i:Interaction.Triggers>
+            <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                <command:EventToCommand Command="{Binding CommandMouseUp}" />
+            </i:EventTrigger>
+            <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                <command:EventToCommand Command="{Binding CommandMouseDown, Mode=OneWay}" 
+                EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
+                EventArgsConverterParameter="{Binding ElementName=SelectionGrid}"
+                PassEventArgsToCommand="True"  />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>-->
         <ItemsControl ItemsSource="{Binding Tiles}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Loaded="Canvas_Loaded" 
-                            MouseLeftButtonDown="CanvasMouseLeftButtonDown"
-                            MouseLeftButtonUp="CanvasMouseLeftButtonUp"
-                            MouseMove="CanvasMouseMove"/>
+                    <Canvas Name="GridCanvas" Background="White" IsHitTestVisible="True">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseMove">
+                                <command:EventToCommand Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.MouseMoveCommand}" CommandParameter="{Binding ElementName=GridCanvas}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Canvas>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
@@ -26,16 +44,21 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Image Source="{Binding Image}" Width="{Binding Width}" Height="{Binding Height}" RenderTransformOrigin="0.5,0.5" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor">
+                    <Image Source="{Binding Image}"  Width="{Binding Width, Mode=OneWay}" Height="{Binding Height, Mode=OneWay}" RenderTransformOrigin="0.5,0.5" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor">
                         <Image.RenderTransform>
                             <ScaleTransform ScaleX="{Binding Flipped}"/>
                         </Image.RenderTransform>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <command:EventToCommand Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.MouseDownCommand}" CommandParameter="{Binding .}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                <command:EventToCommand Command="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=DataContext.MouseUpCommand}" CommandParameter="{Binding .}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </Image>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <!--<Canvas>
-            <Rectangle x:Name="SelectionBox" Visibility="Collapsed" Stroke="DarkBlue" StrokeThickness="1" Fill="#330000FF"/>
-        </Canvas>-->
     </Grid>
 </UserControl>

@@ -17,7 +17,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -86,8 +86,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Dobject.cs" />
+    <Compile Include="Model\Drawable.cs" />
     <Compile Include="Model\Tile.cs" />
     <Compile Include="Utils\BitmapConverter.cs" />
+    <Compile Include="Utils\MouseButtonEventArgsToPointConverter.cs" />
     <Compile Include="ViewModel\CanvasGrid.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

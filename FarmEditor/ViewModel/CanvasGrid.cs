@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using FarmEditor.Model;
 using FarmEditor.Utils;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Microsoft.Xna.Framework;
 using StardewValleySave;
 using StardewValleySave.Buildings;
@@ -17,6 +19,8 @@ using StardewValleySave.TerrainFeatures;
 using TiledSharp;
 using Color = Microsoft.Xna.Framework.Color;
 using Object = StardewValleySave.Objects.Object;
+using System.Windows.Controls;
+using Point = System.Windows.Point;
 
 namespace FarmEditor.ViewModel {
     public class CanvasGrid : ViewModelBase {
@@ -25,25 +29,43 @@ namespace FarmEditor.ViewModel {
         private int _canvasWidth;
 
         private readonly Dictionary<int, int> _dirtmap = new Dictionary<int, int> { { 0000, 0 }, { 0001, 15 }, { 0010, 12 }, { 0011, 11 }, { 0100, 4 }, { 0101, 3 }, { 0110, 8 }, { 0111, 7 }, { 1000, 13 }, { 1001, 14 }, { 1010, 9 }, { 1011, 10 }, { 1100, 1 }, { 1101, 2 }, { 1110, 5 }, { 1111, 6 } };
+        private readonly Dictionary<int, int> _fenceMap = new Dictionary<int, int> { { 0000,  5 }, { 0001,  9 }, { 0010,  3 }, { 0011,  8 }, { 0100,  5 }, { 0101,  2 }, { 0110,  3 }, { 0111,  2 }, { 1000, 10 }, { 1001,  7 }, { 1010,  6 }, { 1011,  7 }, { 1100,  0 }, { 1101,  4 }, { 1110,  0 }, { 1111,  4 }, };
 
-        private readonly Dictionary<int, int> _fenceMap = new Dictionary<int, int> {
-                { 0000,  5 },
-                { 0001,  9 },
-                { 0010,  3 },
-                { 0011,  8 },
-                { 0100,  5 },
-                { 0101,  2 },
-                { 0110,  3 },
-                { 0111,  2 },
-                { 1000, 10 },
-                { 1001,  7 },
-                { 1010,  6 },
-                { 1011,  7 },
-                { 1100,  0 },
-                { 1101,  4 },
-                { 1110,  0 },
-                { 1111,  4 },
-            };
+        //public RelayCommand<Point> CommandMouseUp => new RelayCommand<Point>(MouseUp);
+
+        private RelayCommand<Tile> _mouseUpCommand;
+        private RelayCommand<Tile> _mouseDownCommand;
+        private RelayCommand<Canvas> _mouseMoveCommand;
+
+        public RelayCommand<Tile> MouseUpCommand => _mouseUpCommand ?? (_mouseUpCommand = new RelayCommand<Tile>(MouseUp));
+        public RelayCommand<Tile> MouseDownCommand => _mouseDownCommand ?? (_mouseDownCommand = new RelayCommand<Tile>(MouseDown));
+        public RelayCommand<Canvas> MouseMoveCommand => _mouseMoveCommand ?? (_mouseMoveCommand = new RelayCommand<Canvas>(MouseMove));
+
+        private void MouseMove(Canvas obj) {
+            //var asd = (mouseDownPos - Mouse.GetPosition(obj));
+            mousePos = Mouse.GetPosition(obj);
+
+            if (selected != null) {
+                selected.X = (int)Mouse.GetPosition(obj).X / 16 * 16 + diff.X;
+                selected.Y = (int)Mouse.GetPosition(obj).Y / 16 * 16 + diff.Y;
+            }
+        }
+
+        //private Point mouseDownPos;
+        private Point mousePos;
+        private Point diff;
+
+        private void MouseUp(Tile obj) {
+            selected = null;
+        }
+
+        private Tile selected;
+
+        private void MouseDown(Tile obj) {
+            //mouseDownPos = new Point(obj.X, obj.Y);
+            selected = obj;
+            diff = new Point(selected.X - (int)mousePos.X / 16 * 16 , selected.Y - (int) mousePos.Y / 16 * 16);
+        }
 
         private Dictionary<int, BitmapSource> _bigCraftablespritesheet;
         private Dictionary<int, BitmapSource> _cropSpriteSheet;
@@ -62,19 +84,23 @@ namespace FarmEditor.ViewModel {
 
         readonly Random _rand = new Random();
         private Farm _farm;
+        //private List<IDrawable>[,] test;
 
         public CanvasGrid() {
             var saves = SaveGame.GetSaves();
-
             var save = SaveGame.LoadSave(saves[1].Filename);
+
             _map = new TmxMap(string.Concat("Maps\\", Enum.GetName(typeof(Farm.FarmType), save.whichFarm), ".tmx"));
             _farm = save.locations.FirstOrDefault(location => location.name.Equals("Farm")) as Farm;
 
             _canvasWidth = _map.Width;
             _canvasHeight = _map.Height;
-
+        
             PopulateSprites();
             AddTilesToCanvas();
+
+            Tiles = new ObservableCollection<Tile>();
+
 
             // TODO: Draw FarmHouse
 
@@ -246,6 +272,10 @@ namespace FarmEditor.ViewModel {
             Tiles.Add(new Tile(location.X, location.Y - 16, image.Width, image.Height, image));
         }
 
+        //private void Add(int a, IDrawable i) {
+        //    test[a % _map.TileWidth].Add(i);
+        //}
+
         private void DrawObjects(GameLocation gameLocation) {
             foreach (var farmObject in gameLocation.objects) {
                 if (farmObject.Value.GetType().IsAssignableFrom(typeof(Object))) {
@@ -258,11 +288,11 @@ namespace FarmEditor.ViewModel {
                     continue;
                 }
 
-                Fence fence = farmObject.Value as Fence;
+                //Fence fence = farmObject.Value as Fence;
 
-                if (fence != null) {
-                    DrawFence(fence, farmObject.Key);
-                }
+                //if (fence != null) {
+                //    DrawFence(fence, farmObject.Key);
+            //}
             }
         }
         
